@@ -12,6 +12,9 @@ class Episode(rootDirectory: String, segments: List<EpisodeSegment>) {
     val segmentCount: Int
         get() = segments.size
 
+    val length: Double
+        get() = segments.sumByDouble { it.length }
+
     private val segments = segments
     private val rootDirectory = rootDirectory
 
