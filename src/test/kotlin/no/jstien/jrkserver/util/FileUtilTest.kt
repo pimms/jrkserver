@@ -8,32 +8,29 @@ import java.io.File
 class FileUtilTest {
     @Test
     fun `recursiveDelete throws if subject is not child of root`() {
-        val fileUtil = FileUtil("/tmp/a/")
         assertThrows(RuntimeException::class.java) {
-            fileUtil.recursiveDelete(File("/tmp/b/c"))
+            recursiveDelete(File("/tmp/sneaky_delety/c"))
         }
     }
 
     @Test
     fun `recursiveDelete throws if subect contains path traversal tomfoolery`() {
-        val fileUtil = FileUtil("/tmp/a/")
         assertThrows(RuntimeException::class.java) {
-            fileUtil.recursiveDelete(File("/tmp/a/../"))
+            recursiveDelete(File("$ROOT_TEMP_DIRECTORY/a/../"))
         }
     }
 
     @Test
     fun `recursiveDelete deletes recursively`() {
-        val dirA = File("/tmp/__tmpdir/a")
+        val dirA = File("$ROOT_TEMP_DIRECTORY/a")
         dirA.mkdirs()
         dirA.exists() shouldBe true
 
-        val dirB = File("/tmp/__tmpdir/a")
+        val dirB = File("$ROOT_TEMP_DIRECTORY/a")
         dirB.mkdirs()
         dirB.exists() shouldBe true
 
-        val fileUtil = FileUtil("/tmp/__tmpdir")
-        fileUtil.recursiveDelete(File("/tmp/__tmpdir/"))
+        recursiveDelete(File("$ROOT_TEMP_DIRECTORY"))
 
         dirA.exists() shouldBe false
         dirB.exists() shouldBe false

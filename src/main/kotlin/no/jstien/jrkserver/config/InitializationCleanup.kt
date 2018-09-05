@@ -1,6 +1,7 @@
 package no.jstien.jrkserver.config
 
-import no.jstien.jrkserver.util.FileUtil
+import no.jstien.jrkserver.util.ROOT_TEMP_DIRECTORY
+import no.jstien.jrkserver.util.recursiveDelete
 import org.apache.logging.log4j.LogManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -9,13 +10,12 @@ import javax.annotation.PostConstruct
 
 
 @Component
-private class InitializationCleanup @Autowired constructor(private val fileUtil: FileUtil) {
+private class InitializationCleanup {
     @PostConstruct
     fun deleteStorageDirectory() {
-        val dir = fileUtil.rootTempDirectory
-        LOG.info("Deleting temp-root directory $dir")
-        fileUtil.recursiveDelete(File(dir))
-        File(dir).mkdirs()
+        LOG.info("Deleting temp-root directory $ROOT_TEMP_DIRECTORY")
+        recursiveDelete(File(ROOT_TEMP_DIRECTORY))
+        File(ROOT_TEMP_DIRECTORY).mkdirs()
     }
 
     companion object {
