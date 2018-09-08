@@ -2,6 +2,7 @@ package no.jstien.jrkserver.episodes
 
 import no.jstien.jrkserver.util.recursiveDelete
 import org.apache.logging.log4j.LogManager
+import org.hibernate.validator.internal.util.CollectionHelper
 import java.io.File
 
 class Episode(rootDirectory: String, segments: List<EpisodeSegment>) {
@@ -15,7 +16,8 @@ class Episode(rootDirectory: String, segments: List<EpisodeSegment>) {
     val length: Double
         get() = segments.sumByDouble { it.length }
 
-    private val segments = segments
+    val segments = CollectionHelper.toImmutableList(segments)
+
     private val rootDirectory = rootDirectory
 
     fun getSegment(index: Int): EpisodeSegment {
@@ -23,7 +25,7 @@ class Episode(rootDirectory: String, segments: List<EpisodeSegment>) {
     }
 
     fun cleanUp() {
-        LOGGER.info("Cleaning up segment directory $rootDirectory")
+        LOGGER.info("Cleaning up episode directory $rootDirectory")
         segments.forEach { s -> s.close() }
         recursiveDelete(File(rootDirectory))
     }
