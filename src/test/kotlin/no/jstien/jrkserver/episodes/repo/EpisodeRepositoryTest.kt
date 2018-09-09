@@ -16,7 +16,7 @@ private const val S3_KEY = "20161231.mp3"
 
 class EpisodeRepositoryTest {
     private val fileRepository = mockk<S3FileRepository>()
-    private val metadataExtractor = MetadataExtractor()
+    private var metadataExtractor = MetadataExtractor(null)
     private var episodeRepository: EpisodeRepository? = null
 
     @BeforeEach

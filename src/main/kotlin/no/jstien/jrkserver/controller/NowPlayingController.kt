@@ -45,9 +45,9 @@ class NowPlayingController
         // As of August 16th, this is the sole reason we're including Gson. Not sure if it's worth it.
         val json = JsonObject()
         json.add("isPlaying", JsonPrimitive(true))
-        json.add("name", JsonPrimitive("todo :)"))
-        json.add("key", JsonPrimitive("todo :)"))
-        json.add("season", JsonPrimitive("todo :)"))
+        json.add("name", JsonPrimitive(episode.displayName))
+        json.add("key", JsonPrimitive(episode.s3Key))
+        json.add("season", JsonPrimitive(episode.season))
 
         return ResponseEntity.ok(json.toString())
     }

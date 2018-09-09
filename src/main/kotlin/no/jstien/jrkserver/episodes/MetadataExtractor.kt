@@ -2,16 +2,22 @@ package no.jstien.jrkserver.episodes
 
 import java.text.SimpleDateFormat
 
-class MetadataExtractor {
+class MetadataExtractor(private val seasonPrefix: String?) {
+
     fun extractFromS3Key(s3Key: String): EpisodeMetadata {
         val season = extractSeason(s3Key)
         val displayName = extractDisplayName(s3Key)
 
-        return EpisodeMetadata(displayName, season)
+        return EpisodeMetadata(displayName, season, s3Key)
     }
 
     private fun extractSeason(s3Key: String): String {
-        return s3Key.substring(0, 4)
+        val season = s3Key.substring(0, 4)
+
+        if (seasonPrefix.isNullOrBlank())
+            return season
+
+        return "$seasonPrefix $season"
     }
 
     private fun extractDisplayName(s3Key: String): String {

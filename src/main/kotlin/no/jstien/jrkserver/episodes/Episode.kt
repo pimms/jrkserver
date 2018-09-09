@@ -19,6 +19,7 @@ class Episode(rootDirectory: String, segments: List<EpisodeSegment>) {
     val length: Double      get() = segments.sumByDouble { it.length }
     val season: String      get() = _meta.season
     val displayName: String get() = _meta.displayName
+    val s3Key: String       get() = _meta.s3Key
 
     private val rootDirectory = rootDirectory
 

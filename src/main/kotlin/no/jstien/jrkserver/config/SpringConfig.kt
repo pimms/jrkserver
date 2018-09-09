@@ -6,6 +6,7 @@ import no.jstien.jrkserver.episodes.MetadataExtractor
 import no.jstien.jrkserver.episodes.repo.EpisodeRepository
 import no.jstien.jrkserver.episodes.repo.S3FileRepository
 import no.jstien.jrkserver.stream.InfiniteEpisodeStream
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -30,17 +31,20 @@ open class SpringConfig {
     }
 
     @Bean
-    open fun metadataExtractor(): MetadataExtractor {
-        return MetadataExtractor()
+    @Autowired
+    open fun metadataExtractor(@Value("\${meta.seasonPrefix}") seasonPrefix: String): MetadataExtractor {
+        return MetadataExtractor(seasonPrefix)
     }
 
     @Bean
-    open fun episodeRepository(): EpisodeRepository {
-        return EpisodeRepository(s3FileRepository(), metadataExtractor())
+    @Autowired
+    open fun episodeRepository(metadataExtractor: MetadataExtractor): EpisodeRepository {
+        return EpisodeRepository(s3FileRepository(), metadataExtractor)
     }
 
     @Bean
-    open fun infiniteEpisodeStream(): InfiniteEpisodeStream {
-        return InfiniteEpisodeStream(episodeRepository())
+    @Autowired
+    open fun infiniteEpisodeStream(episodeRepository: EpisodeRepository): InfiniteEpisodeStream {
+        return InfiniteEpisodeStream(episodeRepository)
     }
 }
