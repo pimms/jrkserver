@@ -1,5 +1,6 @@
 package no.jstien.jrkserver.stream
 
+import no.jstien.jrkserver.episodes.Episode
 import no.jstien.jrkserver.episodes.EpisodeRepository
 import no.jstien.jrkserver.episodes.EpisodeSegment
 import org.apache.logging.log4j.LogManager
@@ -10,8 +11,13 @@ class InfiniteEpisodeStream(private val episodeRepository: EpisodeRepository): E
         private val LOG = LogManager.getLogger()
     }
 
+
+    val currentEpisode: Episode?
+        get() = episodeStreams.firstOrNull()?.episode
+
     private var episodeStreams = ArrayList<DefaultEpisodeStream>()
     private var startTime = Double.MIN_VALUE
+
 
     override fun setStartAvailability(startTime: Double) {
         this.startTime = startTime
@@ -26,6 +32,7 @@ class InfiniteEpisodeStream(private val episodeRepository: EpisodeRepository): E
                 .flatMap { it.getAvailableSegments(availabilitySecondsInterval, currentTime).stream() }
                 .collect(Collectors.toList())
     }
+
 
     private fun removeExpiredEpisodes(currentTime: Double) {
         while (episodeStreams.size != 0 && episodeStreams[0].getRemainingTime(currentTime) < 0.0) {

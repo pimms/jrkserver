@@ -4,8 +4,16 @@ import no.jstien.jrkserver.episodes.Episode
 import no.jstien.jrkserver.episodes.EpisodeSegment
 
 class DefaultEpisodeStream(episode: Episode): EpisodeStream {
-    private val episode: Episode = episode
+    val episode: Episode = episode
+
     private var startTime = Double.MIN_VALUE
+
+
+    fun getRemainingTime(currentTime: Double): Double {
+        verifyStartTimeDefined()
+        val episodeLength = episode.length.toLong()
+        return (startTime + episodeLength) - currentTime
+    }
 
     override fun setStartAvailability(startTime: Double) {
         this.startTime = startTime
@@ -34,11 +42,6 @@ class DefaultEpisodeStream(episode: Episode): EpisodeStream {
         return list
     }
 
-    fun getRemainingTime(currentTime: Double): Double {
-        verifyStartTimeDefined()
-        val episodeLength = episode.length.toLong()
-        return (startTime + episodeLength) - currentTime
-    }
 
     private fun verifyStartTimeDefined() {
         if (startTime == Double.MIN_VALUE) {
