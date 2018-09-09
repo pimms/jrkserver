@@ -5,9 +5,11 @@ import org.apache.logging.log4j.LogManager
 import org.hibernate.validator.internal.util.CollectionHelper
 import java.io.File
 
+
 class Episode(rootDirectory: String, segments: List<EpisodeSegment>) {
     companion object {
         private val LOGGER = LogManager.getLogger()
+        const val TARGET_SEGMENT_DURATION = 10
     }
 
     val segmentCount: Int

@@ -1,11 +1,10 @@
 package no.jstien.jrkserver.episodes
 
+import no.jstien.jrkserver.episodes.Episode.Companion.TARGET_SEGMENT_DURATION
 import no.jstien.jrkserver.episodes.segmentation.FFMPEGSegmenter
 import no.jstien.jrkserver.util.ProcessExecutor
 import org.apache.logging.log4j.LogManager
 import java.util.concurrent.CompletableFuture
-
-private const val TARGET_SEGMENT_DURATION = 10
 
 class EpisodeRepository(fileRepository: S3FileRepository) {
     companion object {
