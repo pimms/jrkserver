@@ -27,8 +27,8 @@ class DefaultEpisodeStream(episode: Episode): EpisodeStream {
         val endTime = currentTime + availabilitySecondsInterval.toDouble()
         while (time < endTime && index < episode.segmentCount) {
             list.add(episode.segments[index])
-            index++
             time += episode.segments[index].length
+            index++
         }
 
         return list

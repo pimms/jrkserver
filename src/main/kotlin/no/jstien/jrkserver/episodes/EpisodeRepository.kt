@@ -7,7 +7,7 @@ import java.util.concurrent.CompletableFuture
 
 private const val TARGET_SEGMENT_DURATION = 10
 
-class S3Downloader(fileRepository: S3FileRepository) {
+class EpisodeRepository(fileRepository: S3FileRepository) {
     companion object {
         private val LOGGER = LogManager.getLogger()
     }
