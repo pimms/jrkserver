@@ -2,7 +2,6 @@ package no.jstien.jrkserver.episodes.segmentation
 
 import no.jstien.jrkserver.episodes.Episode
 import no.jstien.jrkserver.episodes.EpisodeSegment
-import no.jstien.jrkserver.episodes.SegmentationRequest
 import no.jstien.jrkserver.util.ProcessExecutor
 import no.jstien.jrkserver.util.ROOT_TEMP_DIRECTORY
 import org.apache.logging.log4j.LogManager
