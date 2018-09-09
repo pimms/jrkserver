@@ -4,21 +4,21 @@ import no.jstien.jrkserver.episodes.EpisodeSegment
 
 interface EpisodeStream {
     companion object {
-        const val NANOS_PER_SEC = 1_000_000_000L
-        private const val DEFAULT_AVAILABILITY_SEC = 60
+        private const val NANOS_PER_SEC = 1_000_000_000L
+        private const val DEFAULT_AVAILABILITY_SEC = 60.0
 
-        fun defaultTimeProvider(): Long {
-            return System.nanoTime()
+        fun defaultTimeProvider(): Double {
+            return System.nanoTime().toDouble() / NANOS_PER_SEC.toDouble()
         }
     }
 
     /**
-     * Flag the start time of the segment stream at @startTimeNs. This point in time could be
+     * Flag the start time of the segment stream at @startTime. This point in time could be
      * in the past, present, or future.
      *
      * Must be called before getRemainingTime and getAvailableSegments
      */
-    fun setStartAvailability(startTimeNs: Long = defaultTimeProvider())
+    fun setStartAvailability(startTime: Double = defaultTimeProvider())
 
     /**
      * Retrieve the list of available segments at the given point in time. If the EpisodeStream's
@@ -29,7 +29,7 @@ interface EpisodeStream {
      * Throws RuntimeException if @setStartAvailability has not yet been called.
      */
     fun getAvailableSegments(
-            availabilitySecondsInterval: Int = DEFAULT_AVAILABILITY_SEC,
-            currentTimeNs:  Long = defaultTimeProvider()
+            availabilitySecondsInterval: Double = DEFAULT_AVAILABILITY_SEC,
+            currentTime:  Double = defaultTimeProvider()
     ): List<EpisodeSegment>
 }

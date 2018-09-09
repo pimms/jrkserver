@@ -7,7 +7,6 @@ import no.jstien.jrkserver.episodes.Episode
 import no.jstien.jrkserver.episodes.EpisodeSegment
 import no.jstien.jrkserver.episodes.S3Downloader
 import no.jstien.jrkserver.util.ROOT_TEMP_DIRECTORY
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -33,10 +32,10 @@ internal class InfiniteEpisodeStreamTest {
 
     @Test
     fun `segments are returned from one episode if possible`() {
-        val now = EpisodeStream.NANOS_PER_SEC
+        val now = 10.0
 
         episodeStream.setStartAvailability(now)
-        val segs = episodeStream.getAvailableSegments(55, now)
+        val segs = episodeStream.getAvailableSegments(55.0, now)
 
         segs.size shouldBe 6
 

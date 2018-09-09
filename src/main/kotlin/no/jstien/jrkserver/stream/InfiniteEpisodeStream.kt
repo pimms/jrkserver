@@ -8,11 +8,11 @@ class InfiniteEpisodeStream(private val s3Downloader: S3Downloader): EpisodeStre
     private var episodes = ArrayList<Episode>()
     private var startTimeNs: Long = -1L
 
-    override fun setStartAvailability(startTimeNs: Long) {
+    override fun setStartAvailability(startTime: Double) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getAvailableSegments(availabilitySecondsInterval: Int, currentTimeNs: Long): List<EpisodeSegment> {
+    override fun getAvailableSegments(availabilitySecondsInterval: Double, currentTime: Double): List<EpisodeSegment> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
