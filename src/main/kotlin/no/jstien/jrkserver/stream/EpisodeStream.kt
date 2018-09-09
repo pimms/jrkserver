@@ -32,13 +32,4 @@ interface EpisodeStream {
             availabilitySecondsInterval: Int = DEFAULT_AVAILABILITY_SEC,
             currentTimeNs:  Long = defaultTimeProvider()
     ): List<EpisodeSegment>
-
-    /**
-     * Get the duration - in nanoseconds - until this episode is complete. If the start time is in the future,
-     * the returned time interval will be larger than the length of the episode. If the episode has completed,
-     * a negative number is returned.
-     *
-     * Throws RuntimeException if @setStartAvailability has not yet been called.
-     */
-    fun getRemainingTime(currentTimeNs: Long = defaultTimeProvider()): Long
 }

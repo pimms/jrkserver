@@ -5,7 +5,6 @@ import no.jstien.jrkserver.episodes.Episode
 import no.jstien.jrkserver.episodes.EpisodeSegment
 import no.jstien.jrkserver.stream.EpisodeStream.Companion.NANOS_PER_SEC
 import no.jstien.jrkserver.util.ROOT_TEMP_DIRECTORY
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 internal class DefaultEpisodeStreamTest {
