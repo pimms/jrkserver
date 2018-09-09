@@ -5,7 +5,7 @@ import io.kotlintest.shouldNotBe
 import io.mockk.every
 import io.mockk.mockk
 import no.jstien.jrkserver.episodes.Episode
-import no.jstien.jrkserver.episodes.EpisodeRepository
+import no.jstien.jrkserver.episodes.repo.EpisodeRepository
 import no.jstien.jrkserver.episodes.EpisodeSegment
 import no.jstien.jrkserver.util.ROOT_TEMP_DIRECTORY
 import org.junit.jupiter.api.BeforeEach

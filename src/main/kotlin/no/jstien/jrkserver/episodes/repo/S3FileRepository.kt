@@ -1,4 +1,4 @@
-package no.jstien.jrkserver.episodes
+package no.jstien.jrkserver.episodes.repo
 
 import com.amazonaws.services.s3.AmazonS3
 import no.jstien.jrkserver.util.ROOT_TEMP_DIRECTORY

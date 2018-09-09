@@ -12,13 +12,13 @@ class Episode(rootDirectory: String, segments: List<EpisodeSegment>) {
         const val TARGET_SEGMENT_DURATION = 10
     }
 
-    val segmentCount: Int
-        get() = segments.size
-
-    val length: Double
-        get() = segments.sumByDouble { it.length }
-
     val segments = CollectionHelper.toImmutableList(segments)
+    var _meta: EpisodeMetadata = EpisodeMetadata()
+
+    val segmentCount: Int   get() = segments.size
+    val length: Double      get() = segments.sumByDouble { it.length }
+    val season: String      get() = _meta.season
+    val displayName: String get() = _meta.displayName
 
     private val rootDirectory = rootDirectory
 

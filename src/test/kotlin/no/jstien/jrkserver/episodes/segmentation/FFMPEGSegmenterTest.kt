@@ -5,15 +5,12 @@ import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import no.jstien.jrkserver.episodes.SegmentationRequest
 import no.jstien.jrkserver.util.ProcessExecutor
 import no.jstien.jrkserver.util.ROOT_TEMP_DIRECTORY
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.io.File
-import java.io.FileOutputStream
 import java.io.FileWriter
 
 class FFMPEGSegmenterTest {

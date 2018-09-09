@@ -1,4 +1,4 @@
-package no.jstien.jrkserver.episodes
+package no.jstien.jrkserver.episodes.segmentation
 
 class SegmentationRequest(desiredSegmentLength: Int, filePath: String, s3Key: String) {
     val desiredSegmentLength: Int = desiredSegmentLength

@@ -1,7 +1,7 @@
 package no.jstien.jrkserver.stream
 
 import no.jstien.jrkserver.episodes.Episode
-import no.jstien.jrkserver.episodes.EpisodeRepository
+import no.jstien.jrkserver.episodes.repo.EpisodeRepository
 import no.jstien.jrkserver.episodes.EpisodeSegment
 import org.apache.logging.log4j.LogManager
 import java.util.stream.Collectors
