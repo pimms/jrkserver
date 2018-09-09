@@ -3,14 +3,12 @@ package no.jstien.jrkserver.config
 import no.jstien.jrkserver.util.ROOT_TEMP_DIRECTORY
 import no.jstien.jrkserver.util.recursiveDelete
 import org.apache.logging.log4j.LogManager
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.io.File
 import javax.annotation.PostConstruct
 
-
 @Component
-private class InitializationCleanup {
+internal class InitializationCleanup {
     @PostConstruct
     fun deleteStorageDirectory() {
         LOG.info("Deleting temp-root directory $ROOT_TEMP_DIRECTORY")

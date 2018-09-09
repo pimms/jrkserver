@@ -2,6 +2,9 @@ package no.jstien.jrkserver.config
 
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
+import no.jstien.jrkserver.episodes.EpisodeRepository
+import no.jstien.jrkserver.episodes.S3FileRepository
+import no.jstien.jrkserver.stream.InfiniteEpisodeStream
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -20,4 +23,18 @@ open class SpringConfig {
         return AmazonS3ClientBuilder.defaultClient()
     }
 
+    @Bean
+    open fun s3FileRepository(): S3FileRepository {
+        return S3FileRepository(s3Client(), s3BucketName!!)
+    }
+
+    @Bean
+    open fun episodeRepository(): EpisodeRepository {
+        return EpisodeRepository(s3FileRepository())
+    }
+
+    @Bean
+    open fun infiniteEpisodeStream(): InfiniteEpisodeStream {
+        return InfiniteEpisodeStream(episodeRepository())
+    }
 }

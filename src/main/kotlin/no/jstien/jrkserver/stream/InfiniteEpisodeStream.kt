@@ -11,7 +11,6 @@ class InfiniteEpisodeStream(private val episodeRepository: EpisodeRepository): E
         private val LOG = LogManager.getLogger()
     }
 
-
     val currentEpisode: Episode?
         get() = episodeStreams.firstOrNull()?.episode
 
@@ -20,6 +19,7 @@ class InfiniteEpisodeStream(private val episodeRepository: EpisodeRepository): E
 
 
     override fun setStartAvailability(startTime: Double) {
+        LOG.info("Setting start availability time at $startTime")
         this.startTime = startTime
         prepareStream(startTime)
     }
@@ -36,6 +36,8 @@ class InfiniteEpisodeStream(private val episodeRepository: EpisodeRepository): E
 
     private fun removeExpiredEpisodes(currentTime: Double) {
         while (episodeStreams.size != 0 && episodeStreams[0].getRemainingTime(currentTime) < 0.0) {
+            LOG.info("Removing expired episode")
+            episodeStreams.first().cleanUp()
             episodeStreams.removeAt(0)
         }
     }

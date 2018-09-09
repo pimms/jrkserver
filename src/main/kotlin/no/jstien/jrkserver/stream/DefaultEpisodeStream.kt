@@ -15,6 +15,10 @@ class DefaultEpisodeStream(episode: Episode): EpisodeStream {
         return (startTime + episodeLength) - currentTime
     }
 
+    fun cleanUp() {
+        episode.cleanUp()
+    }
+
     override fun setStartAvailability(startTime: Double) {
         this.startTime = startTime
     }
