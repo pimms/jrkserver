@@ -11,6 +11,15 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+
+private data class NowPlaying(
+    val isPlaying: Boolean,
+    val name: String?,
+    val key: String?,
+    val season: String?
+)
+
+
 @RestController
 @RequestMapping("/live")
 class NowPlayingController
@@ -22,18 +31,13 @@ class NowPlayingController
         private val LOG = LogManager.getLogger()
     }
 
-    @GetMapping("currentinfo")
-    fun getCurrentInfo(): ResponseEntity<String> {
-        LOG.warn("Call to deprecated endpoint /live/currentinfo")
-        return nowPlaying()
-    }
-
     @GetMapping("nowPlaying")
-    fun nowPlaying(): ResponseEntity<String> {
+    fun nowPlaying(): ResponseEntity<Any> {
         try {
             val episode = infiniteEpisodeStream.currentEpisode
-            return episode?.let { createNowPlayingResponse(it) }
-                ?: createNothingPlayingEpisode()
+            val nowPlaying = episode?.let { createNowPlayingResponse(it) }
+                ?: createNothingPlayingResponse()
+            return ResponseEntity.ok(nowPlaying)
         } catch (e: Exception) {
             val json = JsonObject()
             json.add("error", JsonPrimitive(e.message))
@@ -41,20 +45,11 @@ class NowPlayingController
         }
     }
 
-    fun createNowPlayingResponse(episode: Episode): ResponseEntity<String> {
-        // As of August 16th, this is the sole reason we're including Gson. Not sure if it's worth it.
-        val json = JsonObject()
-        json.add("isPlaying", JsonPrimitive(true))
-        json.add("name", JsonPrimitive(episode.displayName))
-        json.add("key", JsonPrimitive(episode.s3Key))
-        json.add("season", JsonPrimitive(episode.season))
-
-        return ResponseEntity.ok(json.toString())
+    private fun createNowPlayingResponse(episode: Episode): NowPlaying {
+        return NowPlaying(true, episode.displayName, episode.s3Key, episode.season)
     }
 
-    fun createNothingPlayingEpisode(): ResponseEntity<String> {
-        val json = JsonObject()
-        json.add("isPlaying", JsonPrimitive(false))
-        return ResponseEntity.ok(json.toString())
+    private fun createNothingPlayingResponse(): NowPlaying {
+        return NowPlaying(false, null, null, null)
     }
 }

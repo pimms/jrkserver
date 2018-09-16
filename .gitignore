@@ -4,6 +4,7 @@
 .idea/
 .*swp
 .*swo
+*.iml
 
 # CMake
 cmake-build-debug/
