@@ -43,3 +43,4 @@ dependency-reduced-pom.xml
 .DS_Store
 
 src/main/resources/config.properties
+src/main/resources/stream-picture.png

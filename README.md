@@ -19,6 +19,10 @@ the file `TODO.properties` to `config.properties` and put in your actual bucket
 name. There might be some other values in there that you should change to
 something more appropriate as well.
 
+You also need to add an image to the resources-directory named 'stream-picture.png'.
+The image should be square and large enough to be used to fill the width of a modern
+smart-phone without looking poorly.
+
 And of course you're going to need a lot of media hosted in your S3 :)
 
 Also this readme is wildly not up to date.

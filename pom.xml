@@ -110,9 +110,9 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
-                <includes>
-                    <include>config.properties</include>
-                </includes>
+                <excludes>
+                    <exclude>TODO.properties</exclude>
+                </excludes>
             </resource>
         </resources>
 
