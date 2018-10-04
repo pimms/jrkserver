@@ -5,7 +5,7 @@ import no.jstien.jrkserver.episodes.EpisodeSegment
 interface EpisodeStream {
     companion object {
         private const val NANOS_PER_SEC = 1_000_000_000L
-        private const val DEFAULT_AVAILABILITY_SEC = 120.0
+        const val DEFAULT_AVAILABILITY_SEC = 120.0
 
         fun defaultTimeProvider(): Double {
             return System.nanoTime().toDouble() / NANOS_PER_SEC.toDouble()

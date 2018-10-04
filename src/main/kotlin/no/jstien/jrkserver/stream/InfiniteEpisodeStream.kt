@@ -29,12 +29,16 @@ class InfiniteEpisodeStream(private val episodeRepository: EpisodeRepository,
     }
 
     override fun getAvailableSegments(availabilitySecondsInterval: Double, currentTime: Double): List<EpisodeSegment> {
-        removeExpiredEpisodes(currentTime)
-        prepareStreamsIfNeeded(availabilitySecondsInterval, currentTime)
+        updateEpisodeStreams(availabilitySecondsInterval, currentTime)
 
         return episodeStreams.stream()
                 .flatMap { it.getAvailableSegments(availabilitySecondsInterval, currentTime).stream() }
                 .collect(Collectors.toList())
+    }
+
+    fun updateEpisodeStreams(availabilitySecondsInterval: Double, currentTime: Double) {
+        removeExpiredEpisodes(currentTime)
+        prepareStreamsIfNeeded(availabilitySecondsInterval, currentTime)
     }
 
 
@@ -70,6 +74,6 @@ class InfiniteEpisodeStream(private val episodeRepository: EpisodeRepository,
         episodeStreams.add(stream)
 
         eventLog.addEvent(Event("Episode prepared",
-                                "Episode ${episode.displayName} (S ${episode.season}), starting in $delay seconds"))
+                                "Episode '${episode.displayName}' starting  in $delay seconds"))
     }
 }
