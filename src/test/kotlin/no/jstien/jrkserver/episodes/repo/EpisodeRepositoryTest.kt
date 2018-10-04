@@ -8,6 +8,7 @@ import no.jstien.jrkserver.episodes.Episode
 import no.jstien.jrkserver.episodes.EpisodeSegment
 import no.jstien.jrkserver.episodes.MetadataExtractor
 import no.jstien.jrkserver.episodes.segmentation.FFMPEGSegmenter
+import no.jstien.jrkserver.event.EventLog
 import no.jstien.jrkserver.util.ROOT_TEMP_DIRECTORY
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -16,6 +17,7 @@ private const val S3_KEY = "20161231.mp3"
 
 class EpisodeRepositoryTest {
     private val fileRepository = mockk<S3FileRepository>()
+    private val eventLog = mockk<EventLog>(relaxed = true)
     private var metadataExtractor = MetadataExtractor(null)
     private var episodeRepository: EpisodeRepository? = null
 
@@ -30,7 +32,7 @@ class EpisodeRepositoryTest {
         val episode = Episode("$ROOT_TEMP_DIRECTORY/pls", segs)
         every { anyConstructed<FFMPEGSegmenter>().segmentFile(any()) } returns episode
 
-        episodeRepository = EpisodeRepository(fileRepository, metadataExtractor)
+        episodeRepository = EpisodeRepository(fileRepository, metadataExtractor, eventLog)
     }
 
     @Test

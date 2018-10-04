@@ -48,12 +48,12 @@ open class SpringConfig {
     @Bean
     @Autowired
     open fun episodeRepository(metadataExtractor: MetadataExtractor): EpisodeRepository {
-        return EpisodeRepository(s3FileRepository(), metadataExtractor)
+        return EpisodeRepository(s3FileRepository(), metadataExtractor, eventLog())
     }
 
     @Bean
     @Autowired
-    open fun infiniteEpisodeStream(episodeRepository: EpisodeRepository, eventLog: EventLog): InfiniteEpisodeStream {
-        return InfiniteEpisodeStream(episodeRepository, eventLog)
+    open fun infiniteEpisodeStream(episodeRepository: EpisodeRepository): InfiniteEpisodeStream {
+        return InfiniteEpisodeStream(episodeRepository, eventLog())
     }
 }
