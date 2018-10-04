@@ -53,7 +53,7 @@ open class SpringConfig {
 
     @Bean
     @Autowired
-    open fun infiniteEpisodeStream(episodeRepository: EpisodeRepository): InfiniteEpisodeStream {
-        return InfiniteEpisodeStream(episodeRepository)
+    open fun infiniteEpisodeStream(episodeRepository: EpisodeRepository, eventLog: EventLog): InfiniteEpisodeStream {
+        return InfiniteEpisodeStream(episodeRepository, eventLog)
     }
 }

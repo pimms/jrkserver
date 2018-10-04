@@ -5,8 +5,9 @@ import io.kotlintest.shouldNotBe
 import io.mockk.every
 import io.mockk.mockk
 import no.jstien.jrkserver.episodes.Episode
-import no.jstien.jrkserver.episodes.repo.EpisodeRepository
 import no.jstien.jrkserver.episodes.EpisodeSegment
+import no.jstien.jrkserver.episodes.repo.EpisodeRepository
+import no.jstien.jrkserver.event.EventLog
 import no.jstien.jrkserver.util.ROOT_TEMP_DIRECTORY
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -16,7 +17,8 @@ internal class InfiniteEpisodeStreamTest {
     private val SEGMENTS_PER_EPISODE = 6
 
     private val episodeRepository = mockk<EpisodeRepository>()
-    private var episodeStream = InfiniteEpisodeStream(episodeRepository)
+    private val eventLog = mockk<EventLog>(relaxed = true)
+    private var episodeStream = InfiniteEpisodeStream(episodeRepository, eventLog)
 
     @BeforeEach
     fun setup() {
@@ -24,11 +26,11 @@ internal class InfiniteEpisodeStreamTest {
             episodeRepository.getNextEpisode()
         } answers { createEpisode() }
 
-        episodeStream = InfiniteEpisodeStream(episodeRepository)
+        episodeStream = InfiniteEpisodeStream(episodeRepository, eventLog)
     }
 
     private fun createEpisode(): Episode {
-        val segs = Array<EpisodeSegment>(SEGMENTS_PER_EPISODE) {
+        val segs = Array(SEGMENTS_PER_EPISODE) {
             i -> EpisodeSegment(i, SEGMENT_DURATION, ROOT_TEMP_DIRECTORY + "/lel/$i.mp3")
         }
         return Episode(ROOT_TEMP_DIRECTORY + "/lel", segs.toList())
