@@ -21,7 +21,6 @@ internal class EventLogTest {
         log.getEvents() shouldBe listOf(event1, event2, event3)
     }
 
-
     @Test
     fun `trimming removes events before a prior date`() {
         val log = EventLog()

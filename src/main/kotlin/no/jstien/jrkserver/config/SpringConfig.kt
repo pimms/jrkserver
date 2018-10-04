@@ -5,6 +5,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import no.jstien.jrkserver.episodes.MetadataExtractor
 import no.jstien.jrkserver.episodes.repo.EpisodeRepository
 import no.jstien.jrkserver.episodes.repo.S3FileRepository
+import no.jstien.jrkserver.event.Event
+import no.jstien.jrkserver.event.EventLog
 import no.jstien.jrkserver.stream.InfiniteEpisodeStream
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -28,6 +30,13 @@ open class SpringConfig {
     @Bean
     open fun s3FileRepository(): S3FileRepository {
         return S3FileRepository(s3Client(), s3BucketName!!)
+    }
+
+    @Bean
+    open fun eventLog(): EventLog {
+        val eventLog = EventLog()
+        eventLog.addEvent(Event("Server started"))
+        return eventLog
     }
 
     @Bean
