@@ -37,17 +37,17 @@ class EpisodeRepository(fileRepository: S3FileRepository, metadataExtractor: Met
         LOGGER.info("Starting preparation of episode")
 
         val s3Key = episodeRepository.popRandomS3Key()
-        eventLog.addEvent(Event("Download started", "S3-key '${s3Key}'"))
+        eventLog.addEvent(Event.Type.SERVER_EVENT, "Download started", "S3-key '${s3Key}'")
 
         val path = episodeRepository.downloadFile(s3Key)
 
-        eventLog.addEvent(Event("Segmentation started", "S3-key '${s3Key}'"))
+        eventLog.addEvent(Event.Type.SERVER_EVENT, "Segmentation started", "S3-key '${s3Key}'")
         val segmentationRequest = SegmentationRequest(TARGET_SEGMENT_DURATION, path, s3Key)
         val segmenter = FFMPEGSegmenter(ProcessExecutor())
         val episode = segmenter.segmentFile(segmentationRequest)
         episode._meta = metadataExtractor.extractFromS3Key(s3Key)
 
-        eventLog.addEvent(Event("Segmentation completed", "S3-key '${s3Key}'"))
+        eventLog.addEvent(Event.Type.SERVER_EVENT, "Segmentation completed", "S3-key '${s3Key}'")
         LOGGER.info("Episode prepared")
         return episode
     }

@@ -5,8 +5,22 @@ import java.time.ZonedDateTime
 class EventLog {
     private val events: ArrayList<Event> = ArrayList()
 
+
     fun getEvents(): List<Event> {
         return events.toList()
+    }
+
+    fun getEvents(filter: Event.Type): List<Event> {
+        return events.filter { e -> e.type == filter }.toList()
+    }
+
+
+    fun addEvent(type: Event.Type, title: String) {
+        addEvent(Event(type, title))
+    }
+
+    fun addEvent(type: Event.Type, title: String, description: String) {
+        addEvent(Event(type, title, description))
     }
 
     fun addEvent(event: Event) {
@@ -19,6 +33,7 @@ class EventLog {
 
         events.add(index, event)
     }
+
 
     fun trimBefore(time: ZonedDateTime) {
         events.removeIf { e -> e.timestamp.isBefore(time) }

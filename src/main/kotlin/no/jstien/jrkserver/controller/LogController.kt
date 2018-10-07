@@ -9,14 +9,21 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/live")
+@RequestMapping("/logs")
 class LogController
     @Autowired constructor(
         private val eventLog: EventLog
     )
 {
-    @GetMapping("eventlog")
-    fun getEvents():ResponseEntity<List<Event>> {
-        return ResponseEntity.ok(eventLog.getEvents())
+    @GetMapping("events")
+    fun getServerEvents(): ResponseEntity<List<Event>> {
+        val events = eventLog.getEvents(Event.Type.SERVER_EVENT)
+        return ResponseEntity.ok(events)
+    }
+
+    @GetMapping("episodes")
+    fun getEpisodeHistory(): ResponseEntity<List<Event>> {
+        val events = eventLog.getEvents(Event.Type.EPISODE_PLAY)
+        return ResponseEntity.ok(events)
     }
 }

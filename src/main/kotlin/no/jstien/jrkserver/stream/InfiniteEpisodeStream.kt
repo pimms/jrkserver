@@ -6,6 +6,7 @@ import no.jstien.jrkserver.episodes.repo.EpisodeRepository
 import no.jstien.jrkserver.event.Event
 import no.jstien.jrkserver.event.EventLog
 import org.apache.logging.log4j.LogManager
+import java.time.ZonedDateTime
 import java.util.stream.Collectors
 
 class InfiniteEpisodeStream(private val episodeRepository: EpisodeRepository,
@@ -45,7 +46,11 @@ class InfiniteEpisodeStream(private val episodeRepository: EpisodeRepository,
     private fun removeExpiredEpisodes(currentTime: Double) {
         while (episodeStreams.size != 0 && episodeStreams[0].getRemainingTime(currentTime) < 0.0) {
             LOG.info("Removing expired episode")
-            eventLog.addEvent(Event("Episode evicted", "Episode ${episodeStreams.first().episode.displayName} has expired"))
+
+            eventLog.addEvent(Event.Type.SERVER_EVENT,
+                              "Episode evicted",
+                              "Episode ${episodeStreams.first().episode.displayName} has expired")
+
             episodeStreams.first().cleanUp()
             episodeStreams.removeAt(0)
         }
@@ -73,7 +78,23 @@ class InfiniteEpisodeStream(private val episodeRepository: EpisodeRepository,
         stream.setStartAvailability(currentTime + delay)
         episodeStreams.add(stream)
 
-        eventLog.addEvent(Event("Episode prepared",
-                                "Episode '${episode.displayName}' starting  in $delay seconds"))
+        logEpisodeStart(episode, delay);
+    }
+
+    private fun logEpisodeStart(episode: Episode, delay: Double) {
+        val date = ZonedDateTime.now().plusSeconds(delay.toLong())
+
+        eventLog.addEvent(Event.Type.SERVER_EVENT,
+                "Episode prepared",
+                "Episode '${episode.displayName}' starting  in $delay seconds")
+
+        eventLog.addEvent(
+            Event(
+                Event.Type.EPISODE_PLAY,
+                date,
+                episode.displayName,
+                episode.season
+            )
+        )
     }
 }

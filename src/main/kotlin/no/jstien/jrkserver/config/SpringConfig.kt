@@ -35,7 +35,7 @@ open class SpringConfig {
     @Bean
     open fun eventLog(): EventLog {
         val eventLog = EventLog()
-        eventLog.addEvent(Event("Server started"))
+        eventLog.addEvent(Event.Type.SERVER_EVENT, "Server started")
         return eventLog
     }
 
