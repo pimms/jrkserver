@@ -1,6 +1,7 @@
 package no.jstien.roi.episodes.repo
 
 import com.amazonaws.services.s3.AmazonS3
+import com.amazonaws.services.s3.model.ListObjectsV2Request
 import no.jstien.roi.util.ROOT_TEMP_DIRECTORY
 import org.apache.logging.log4j.LogManager
 import java.io.File
@@ -65,8 +66,18 @@ class S3FileRepository(s3Client: AmazonS3, s3BucketName: String) {
     }
 
     private fun refreshEpisodeNames() {
+        val req = ListObjectsV2Request()
+        req.bucketName = s3BucketName
+        req.maxKeys = 10000
+
+        var result = s3Client.listObjectsV2(req);
+        while (result.objectSummaries.size > 0) {
+            result.objectSummaries.forEach { s -> fileNames.add(s.key) }
+
+            req.startAfter = fileNames.last()
+            result = s3Client.listObjectsV2(req)
+        }
+
         fileNames.clear()
-        val result = s3Client.listObjectsV2(s3BucketName)
-        result.objectSummaries.forEach { s -> fileNames.add(s.key) }
     }
 }
