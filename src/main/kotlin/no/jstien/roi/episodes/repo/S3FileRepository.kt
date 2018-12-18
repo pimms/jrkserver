@@ -54,10 +54,10 @@ class S3FileRepository(s3Client: AmazonS3, s3BucketName: String) {
         }
     }
 
-    private  fun ClosedRange<Int>.random(): Int {
+    private fun ClosedRange<Int>.random(): Int {
         val rand = Random()
         rand.setSeed(System.nanoTime())
-        return rand.nextInt((endInclusive + 1) - start) +  start
+        return rand.nextInt((endInclusive + 1) - start) + start
     }
 
     private fun refreshEpisodesIfEmpty() {
@@ -69,6 +69,7 @@ class S3FileRepository(s3Client: AmazonS3, s3BucketName: String) {
         val req = ListObjectsV2Request()
         req.bucketName = s3BucketName
         req.maxKeys = 10000
+        fileNames.clear()
 
         var result = s3Client.listObjectsV2(req);
         while (result.objectSummaries.size > 0) {
@@ -77,7 +78,5 @@ class S3FileRepository(s3Client: AmazonS3, s3BucketName: String) {
             req.startAfter = fileNames.last()
             result = s3Client.listObjectsV2(req)
         }
-
-        fileNames.clear()
     }
 }
