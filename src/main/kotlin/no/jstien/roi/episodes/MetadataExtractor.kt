@@ -1,14 +1,16 @@
 package no.jstien.roi.episodes
 
 import java.text.SimpleDateFormat
+import java.util.*
 
 class MetadataExtractor(private val seasonPrefix: String?) {
 
     fun extractFromS3Key(s3Key: String): EpisodeMetadata {
         val season = extractSeason(s3Key)
-        val displayName = extractDisplayName(s3Key)
+        val date = extractDate(s3Key);
+        val displayName = extractDisplayName(date)
 
-        return EpisodeMetadata(displayName, season, s3Key)
+        return EpisodeMetadata(displayName, date, season, s3Key)
     }
 
     private fun extractSeason(s3Key: String): String {
@@ -20,24 +22,24 @@ class MetadataExtractor(private val seasonPrefix: String?) {
         return "$seasonPrefix $season"
     }
 
-    private fun extractDisplayName(s3Key: String): String {
+    private fun extractDate(s3Key: String): Date {
+        if (s3Key.matches(Regex("[0-9]{8,}.*"))) {
+            val format = SimpleDateFormat("yyyyMMdd")
+            return format.parse(s3Key.substring(0, 8))
+        } else {
+            throw Exception("Failed to parse date from S3-key '$s3Key'")
+        }
+    }
+
+    private fun extractDisplayName(date: Date): String {
         // can prolly be simplified by using proper locales
         val weekdays = arrayOf("Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag")
-        // val months = arrayOf("januar", "februar", "mars", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember")
 
-        return if (s3Key.matches(Regex("[0-9]{8,}.*"))) {
-            val format = SimpleDateFormat("yyyyMMdd")
-            val date = format.parse(s3Key.substring(0, 8))
+        // deprecation schmeprecation
+        val weekday = weekdays[date.day]
+        val month = date.month + 1
+        val day = date.date
 
-            // deprecation schmeprecation
-            val weekday = weekdays[date.day]
-            val month = date.month + 1
-            val day = date.date
-
-            "$weekday $day/$month"
-        } else {
-            s3Key
-        }
-
+        return "$weekday $day/$month"
     }
 }
