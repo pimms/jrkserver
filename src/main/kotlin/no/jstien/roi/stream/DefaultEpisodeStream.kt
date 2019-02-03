@@ -1,22 +1,22 @@
 package no.jstien.roi.stream
 
-import no.jstien.roi.episodes.Episode
 import no.jstien.roi.episodes.EpisodeSegment
+import no.jstien.roi.episodes.StreamableEpisode
 
-class DefaultEpisodeStream(episode: Episode): EpisodeStream {
-    val episode: Episode = episode
+class DefaultEpisodeStream(streamableEpisode: StreamableEpisode): EpisodeStream {
+    val streamableEpisode: StreamableEpisode = streamableEpisode
 
     private var startTime = Double.MIN_VALUE
 
 
     fun getRemainingTime(currentTime: Double): Double {
         verifyStartTimeDefined()
-        val episodeLength = episode.length.toLong()
+        val episodeLength = streamableEpisode.length.toLong()
         return (startTime + episodeLength) - currentTime
     }
 
     fun cleanUp() {
-        episode.cleanUp()
+        streamableEpisode.cleanUp()
     }
 
     override fun setStartAvailability(startTime: Double) {
@@ -31,15 +31,15 @@ class DefaultEpisodeStream(episode: Episode): EpisodeStream {
         // Find the first segment to inlcude
         var time = startTime
         var index = 0
-        while (index < episode.segmentCount && time + episode.segments[index].length < currentTime) {
-            time += episode.segments[index].length
+        while (index < streamableEpisode.segmentCount && time + streamableEpisode.segments[index].length < currentTime) {
+            time += streamableEpisode.segments[index].length
             index++
         }
 
         val endTime = currentTime + availabilitySecondsInterval.toDouble()
-        while (time < endTime && index < episode.segmentCount) {
-            list.add(episode.segments[index])
-            time += episode.segments[index].length
+        while (time < endTime && index < streamableEpisode.segmentCount) {
+            list.add(streamableEpisode.segments[index])
+            time += streamableEpisode.segments[index].length
             index++
         }
 

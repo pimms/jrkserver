@@ -1,7 +1,7 @@
 package no.jstien.roi.stream
 
 import io.kotlintest.shouldBe
-import no.jstien.roi.episodes.Episode
+import no.jstien.roi.episodes.StreamableEpisode
 import no.jstien.roi.episodes.EpisodeSegment
 import no.jstien.roi.util.ROOT_TEMP_DIRECTORY
 import org.junit.jupiter.api.Test
@@ -10,19 +10,19 @@ internal class DefaultEpisodeStreamTest {
     private val SEGMENT_COUNT = 50
     private val SEGMENT_LEN = 15.0
 
-    private var episode: Episode = createEpisode()
+    private var streamableEpisode: StreamableEpisode = createEpisode()
 
 
-    private fun createEpisode(): Episode {
+    private fun createEpisode(): StreamableEpisode {
         val segs = Array(SEGMENT_COUNT) { i -> EpisodeSegment(i, SEGMENT_LEN, "$ROOT_TEMP_DIRECTORY/lul/$i.mp3") }
-        return Episode("$ROOT_TEMP_DIRECTORY/lul", segs.toList())
+        return StreamableEpisode("$ROOT_TEMP_DIRECTORY/lul", segs.toList())
     }
 
 
     @Test
     fun `episode end time is properly calculated when startTime is in the future`() {
-        val streamer = DefaultEpisodeStream(episode)
-        val episodeDurationNs = episode.length.toLong()
+        val streamer = DefaultEpisodeStream(streamableEpisode)
+        val episodeDurationNs = streamableEpisode.length.toLong()
 
         streamer.setStartAvailability(0.5)
         val remaining = streamer.getRemainingTime(0.0)
@@ -32,8 +32,8 @@ internal class DefaultEpisodeStreamTest {
 
     @Test
     fun `episode end time is negative when in the past`() {
-        val streamer = DefaultEpisodeStream(episode)
-        val episodeDuration = episode.length.toLong()
+        val streamer = DefaultEpisodeStream(streamableEpisode)
+        val episodeDuration = streamableEpisode.length.toLong()
 
         streamer.setStartAvailability(1.0)
         val remaining = streamer.getRemainingTime(episodeDuration + 10.0)
@@ -44,7 +44,7 @@ internal class DefaultEpisodeStreamTest {
 
     @Test
     fun `segments lasts at least as long as availability interval`() {
-        val streamer = DefaultEpisodeStream(episode)
+        val streamer = DefaultEpisodeStream(streamableEpisode)
         streamer.setStartAvailability(10.0)
 
         for (i in 1 until SEGMENT_LEN.toInt() * 2) {
@@ -55,7 +55,7 @@ internal class DefaultEpisodeStreamTest {
 
     @Test
     fun `additional segments are addded as time progresses`() {
-        val streamer = DefaultEpisodeStream(episode)
+        val streamer = DefaultEpisodeStream(streamableEpisode)
         var now = 10.0
 
         streamer.setStartAvailability(now)

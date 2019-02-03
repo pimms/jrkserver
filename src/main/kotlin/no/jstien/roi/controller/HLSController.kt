@@ -1,6 +1,6 @@
 package no.jstien.roi.controller
 
-import no.jstien.roi.episodes.Episode.Companion.TARGET_SEGMENT_DURATION
+import no.jstien.roi.episodes.StreamableEpisode.Companion.TARGET_SEGMENT_DURATION
 import no.jstien.roi.stream.InfiniteEpisodeStream
 import org.apache.logging.log4j.LogManager
 import org.springframework.beans.factory.annotation.Autowired

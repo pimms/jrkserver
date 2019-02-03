@@ -1,6 +1,6 @@
 package no.jstien.roi.stream
 
-import no.jstien.roi.episodes.Episode
+import no.jstien.roi.episodes.StreamableEpisode
 import no.jstien.roi.episodes.EpisodeSegment
 import no.jstien.roi.episodes.repo.EpisodeRepository
 import no.jstien.roi.event.Event
@@ -15,8 +15,8 @@ class InfiniteEpisodeStream(private val episodeRepository: EpisodeRepository,
         private val LOG = LogManager.getLogger()
     }
 
-    val currentEpisode: Episode?
-        get() = episodeStreams.firstOrNull()?.episode
+    val currentEpisode: StreamableEpisode?
+        get() = episodeStreams.firstOrNull()?.streamableEpisode
 
     private var episodeStreams = ArrayList<DefaultEpisodeStream>()
 
@@ -45,11 +45,11 @@ class InfiniteEpisodeStream(private val episodeRepository: EpisodeRepository,
 
     private fun removeExpiredEpisodes(currentTime: Double) {
         while (episodeStreams.size != 0 && episodeStreams[0].getRemainingTime(currentTime) < 0.0) {
-            LOG.info("Removing expired episode")
+            LOG.info("Removing expired streamableEpisode")
 
             eventLog.addEvent(Event.Type.SERVER_EVENT,
-                              "Episode evicted",
-                              "Episode ${episodeStreams.first().episode.displayName} has expired")
+                              "StreamableEpisode evicted",
+                              "StreamableEpisode ${episodeStreams.first().streamableEpisode.displayName} has expired")
 
             episodeStreams.first().cleanUp()
             episodeStreams.removeAt(0)
@@ -81,19 +81,19 @@ class InfiniteEpisodeStream(private val episodeRepository: EpisodeRepository,
         logEpisodeStart(episode, delay);
     }
 
-    private fun logEpisodeStart(episode: Episode, delay: Double) {
+    private fun logEpisodeStart(streamableEpisode: StreamableEpisode, delay: Double) {
         val date = ZonedDateTime.now().plusSeconds(delay.toLong())
 
         eventLog.addEvent(Event.Type.SERVER_EVENT,
-                "Episode prepared",
-                "Episode '${episode.displayName}' starting  in $delay seconds")
+                "StreamableEpisode prepared",
+                "StreamableEpisode '${streamableEpisode.displayName}' starting  in $delay seconds")
 
         eventLog.addEvent(
             Event(
                 Event.Type.EPISODE_PLAY,
                 date,
-                episode.displayName,
-                episode.season
+                streamableEpisode.displayName,
+                streamableEpisode.season
             )
         )
     }

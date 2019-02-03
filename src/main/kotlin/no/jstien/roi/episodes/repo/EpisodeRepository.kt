@@ -1,7 +1,7 @@
 package no.jstien.roi.episodes.repo
 
-import no.jstien.roi.episodes.Episode
-import no.jstien.roi.episodes.Episode.Companion.TARGET_SEGMENT_DURATION
+import no.jstien.roi.episodes.StreamableEpisode
+import no.jstien.roi.episodes.StreamableEpisode.Companion.TARGET_SEGMENT_DURATION
 import no.jstien.roi.episodes.MetadataExtractor
 import no.jstien.roi.episodes.segmentation.FFMPEGSegmenter
 import no.jstien.roi.episodes.segmentation.SegmentationRequest
@@ -23,18 +23,18 @@ class EpisodeRepository(fileRepository: S3FileRepository, metadataExtractor: Met
     private var episodeTask = startNextDownload()
 
 
-    fun getNextEpisode(): Episode {
+    fun getNextEpisode(): StreamableEpisode {
         val episode = episodeTask.get()
         episodeTask = startNextDownload()
         return episode
     }
 
-    private fun startNextDownload(): CompletableFuture<Episode> {
+    private fun startNextDownload(): CompletableFuture<StreamableEpisode> {
         return CompletableFuture.supplyAsync { downloadEpisode() }
     }
 
-    private fun downloadEpisode(): Episode {
-        LOGGER.info("Starting preparation of episode")
+    private fun downloadEpisode(): StreamableEpisode {
+        LOGGER.info("Starting preparation of streamableEpisode")
 
         val s3Key = episodeRepository.popRandomS3Key()
         eventLog.addEvent(Event.Type.SERVER_EVENT, "Download started", "S3-key '${s3Key}'")
@@ -48,7 +48,7 @@ class EpisodeRepository(fileRepository: S3FileRepository, metadataExtractor: Met
         episode._meta = metadataExtractor.extractFromS3Key(s3Key)
 
         eventLog.addEvent(Event.Type.SERVER_EVENT, "Segmentation completed", "S3-key '${s3Key}'")
-        LOGGER.info("Episode prepared")
+        LOGGER.info("StreamableEpisode prepared")
         return episode
     }
 

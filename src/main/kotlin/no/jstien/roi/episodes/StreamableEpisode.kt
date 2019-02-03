@@ -6,7 +6,7 @@ import org.hibernate.validator.internal.util.CollectionHelper
 import java.io.File
 
 
-class Episode(rootDirectory: String, segments: List<EpisodeSegment>) {
+class StreamableEpisode(rootDirectory: String, segments: List<EpisodeSegment>) {
     companion object {
         private val LOGGER = LogManager.getLogger()
         const val TARGET_SEGMENT_DURATION = 10
@@ -28,7 +28,7 @@ class Episode(rootDirectory: String, segments: List<EpisodeSegment>) {
     }
 
     fun cleanUp() {
-        LOGGER.info("Cleaning up episode directory $rootDirectory")
+        LOGGER.info("Cleaning up streamableEpisode directory $rootDirectory")
         segments.forEach { s -> s.close() }
         recursiveDelete(File(rootDirectory))
     }

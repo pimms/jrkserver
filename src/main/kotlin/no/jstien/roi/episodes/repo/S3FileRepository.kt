@@ -54,6 +54,11 @@ class S3FileRepository(s3Client: AmazonS3, s3BucketName: String) {
         }
     }
 
+    fun getAllFileNames(): List<String> {
+        refreshEpisodesIfEmpty()
+        return fileNames
+    }
+
     private fun ClosedRange<Int>.random(): Int {
         val rand = Random()
         rand.setSeed(System.nanoTime())

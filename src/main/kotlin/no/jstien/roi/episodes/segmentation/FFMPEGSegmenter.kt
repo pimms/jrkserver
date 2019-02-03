@@ -1,6 +1,6 @@
 package no.jstien.roi.episodes.segmentation
 
-import no.jstien.roi.episodes.Episode
+import no.jstien.roi.episodes.StreamableEpisode
 import no.jstien.roi.episodes.EpisodeSegment
 import no.jstien.roi.util.ProcessExecutor
 import no.jstien.roi.util.ROOT_TEMP_DIRECTORY
@@ -53,7 +53,7 @@ internal class FFMPEGSegmenter constructor(processExecutor: ProcessExecutor) {
         }
     }
 
-    fun segmentFile(request: SegmentationRequest): Episode {
+    fun segmentFile(request: SegmentationRequest): StreamableEpisode {
         LOGGER.info("Starting segmentation")
         generateRootPath()
         executeFfmpeg(request.filePath, request.desiredSegmentLength)
@@ -61,7 +61,7 @@ internal class FFMPEGSegmenter constructor(processExecutor: ProcessExecutor) {
         val segments = parseFfmpegOutput()
         LOGGER.info("Segmentation completed")
 
-        return Episode(workDirectory, segments)
+        return StreamableEpisode(workDirectory, segments)
     }
 
     private fun generateRootPath() {

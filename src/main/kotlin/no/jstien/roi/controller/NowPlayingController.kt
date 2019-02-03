@@ -2,7 +2,7 @@ package no.jstien.roi.controller
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
-import no.jstien.roi.episodes.Episode
+import no.jstien.roi.episodes.StreamableEpisode
 import no.jstien.roi.stream.InfiniteEpisodeStream
 import org.apache.logging.log4j.LogManager
 import org.springframework.beans.factory.annotation.Autowired
@@ -45,8 +45,8 @@ class NowPlayingController
         }
     }
 
-    private fun createNowPlayingResponse(episode: Episode): NowPlaying {
-        return NowPlaying(true, episode.displayName, episode.s3Key, episode.season)
+    private fun createNowPlayingResponse(streamableEpisode: StreamableEpisode): NowPlaying {
+        return NowPlaying(true, streamableEpisode.displayName, streamableEpisode.s3Key, streamableEpisode.season)
     }
 
     private fun createNothingPlayingResponse(): NowPlaying {

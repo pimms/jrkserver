@@ -4,7 +4,7 @@ import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.mockk.every
 import io.mockk.mockk
-import no.jstien.roi.episodes.Episode
+import no.jstien.roi.episodes.StreamableEpisode
 import no.jstien.roi.episodes.EpisodeSegment
 import no.jstien.roi.episodes.repo.EpisodeRepository
 import no.jstien.roi.event.EventLog
@@ -29,11 +29,11 @@ internal class InfiniteEpisodeStreamTest {
         episodeStream = InfiniteEpisodeStream(episodeRepository, eventLog)
     }
 
-    private fun createEpisode(): Episode {
+    private fun createEpisode(): StreamableEpisode {
         val segs = Array(SEGMENTS_PER_EPISODE) {
             i -> EpisodeSegment(i, SEGMENT_DURATION, ROOT_TEMP_DIRECTORY + "/lel/$i.mp3")
         }
-        return Episode(ROOT_TEMP_DIRECTORY + "/lel", segs.toList())
+        return StreamableEpisode(ROOT_TEMP_DIRECTORY + "/lel", segs.toList())
     }
 
 
@@ -46,7 +46,7 @@ internal class InfiniteEpisodeStreamTest {
 
         segs.size shouldBe 6
 
-        // We know that the segments are from the same episode, because they will have
+        // We know that the segments are from the same streamableEpisode, because they will have
         // an increasing index.
         for (i in 0 until 6) {
             segs[i].index shouldBe i
