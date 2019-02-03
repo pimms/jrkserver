@@ -1,8 +1,13 @@
 package no.jstien.roi.event
 
+import org.apache.logging.log4j.LogManager
 import java.time.ZonedDateTime
 
 class EventLog {
+    companion object {
+        private val LOG = LogManager.getLogger()
+    }
+
     private val events: ArrayList<Event> = ArrayList()
 
 
@@ -32,6 +37,12 @@ class EventLog {
         }
 
         events.add(index, event)
+
+        if (event.description != null) {
+            LOG.info("[${event.type}] ${event.title}: ${event.description}")
+        } else {
+            LOG.info("[${event.type}] ${event.title}")
+        }
     }
 
 

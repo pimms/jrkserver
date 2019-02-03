@@ -52,6 +52,7 @@ class HLSController
                 #EXT-X-ALLOW-CACHE:NO
                 #EXT-X-TARGETDURATION:$TARGET_SEGMENT_DURATION
                 #EXT-X-MEDIA-SEQUENCE:${firstInSequence}
+
                 """.trimIndent()
         val builder = StringBuilder()
         builder.append(boilerplate)

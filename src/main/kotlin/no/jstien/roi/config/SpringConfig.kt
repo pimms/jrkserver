@@ -2,6 +2,7 @@ package no.jstien.roi.config
 
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
+import no.jstien.roi.controller.TimeProvider
 import no.jstien.roi.episodes.MetadataExtractor
 import no.jstien.roi.episodes.repo.EpisodeRepository
 import no.jstien.roi.episodes.repo.S3FileRepository
@@ -50,6 +51,7 @@ open class SpringConfig {
     open fun eventLog(): EventLog {
         val eventLog = EventLog()
         eventLog.addEvent(Event.Type.SERVER_EVENT, "Server started")
+        TimeProvider.eventLog = eventLog
         return eventLog
     }
 

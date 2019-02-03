@@ -2,14 +2,12 @@ package no.jstien.roi.controller
 
 import no.jstien.roi.event.Event
 import no.jstien.roi.event.EventLog
-import org.springframework.beans.factory.annotation.Autowired
 
 object TimeProvider {
-    private const val IDLE_THRESHOLD_SEC: Double = 5400.0
+    private const val IDLE_THRESHOLD_SEC: Double = 60.0
     private const val NANOS_PER_SEC = 1_000_000_000L
 
-    @Autowired
-    private var eventLog: EventLog? = null
+    var eventLog: EventLog? = null
 
     private var lastActivity: Double = getClockTime()
     private var paused: Boolean = false
