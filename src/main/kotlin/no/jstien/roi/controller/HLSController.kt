@@ -26,26 +26,33 @@ class HLSController
     @GetMapping("playlist.m3u8")
     fun getPlaylist(): ResponseEntity<String> {
         LOG.debug("GET: /playlist.m3u8")
-        val body = "#EXTM3U\n" +
-                "#EXT-X-VERSION:3\n" +
-                "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=40000\n" +
-                "chunks.m3u8"
+
+        val body =
+                """
+                #EXTM3U
+                #EXT-X-VERSION:3
+                #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=40000
+                chunks.m3u8
+                """.trimIndent()
         return createM3u8Response(body)
     }
 
     @GetMapping("/chunks.m3u8")
     fun getChunkList(): ResponseEntity<String> {
         LOG.debug("GET: /chunks.m3u8")
+        TimeProvider.registerActivity()
 
-        val segments = infiniteEpisodeStream.getAvailableSegments()
+        val segments = infiniteEpisodeStream.getAvailableSegments(currentTime = TimeProvider.getTime())
         val firstInSequence = segments.stream().map { s -> s.id }.findFirst().orElse(0)
 
         val boilerplate =
-                "#EXTM3U\n" +
-                        "#EXT-X-VERSION:3\n" +
-                        "#EXT-X-ALLOW-CACHE:NO\n" +
-                        "#EXT-X-TARGETDURATION:$TARGET_SEGMENT_DURATION\n" +
-                        "#EXT-X-MEDIA-SEQUENCE:${firstInSequence}\n"
+                """
+                #EXTM3U
+                #EXT-X-VERSION:3
+                #EXT-X-ALLOW-CACHE:NO
+                #EXT-X-TARGETDURATION:$TARGET_SEGMENT_DURATION
+                #EXT-X-MEDIA-SEQUENCE:${firstInSequence}
+                """.trimIndent()
         val builder = StringBuilder()
         builder.append(boilerplate)
 
@@ -59,7 +66,9 @@ class HLSController
 
     @GetMapping("/segment_{id}.ts")
     fun getSegment(@PathVariable id: Int): ResponseEntity<Any> {
-        val segment = infiniteEpisodeStream.getAvailableSegments()
+        TimeProvider.registerActivity()
+
+        val segment = infiniteEpisodeStream.getAvailableSegments(currentTime = TimeProvider.getTime())
                 .find { s -> id == s.id }
                 ?: return ResponseEntity.notFound().build()
 

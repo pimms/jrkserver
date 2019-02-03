@@ -1,5 +1,6 @@
 package no.jstien.roi.config
 
+import no.jstien.roi.controller.TimeProvider
 import no.jstien.roi.event.EventLog
 import no.jstien.roi.stream.EpisodeStream
 import no.jstien.roi.stream.InfiniteEpisodeStream
@@ -27,7 +28,7 @@ internal class ScheduledMaintenanceTasks
         recursiveDelete(File(ROOT_TEMP_DIRECTORY))
         File(ROOT_TEMP_DIRECTORY).mkdirs()
 
-        infiniteEpisodeStream.setStartAvailability()
+        infiniteEpisodeStream.setStartAvailability(TimeProvider.getTime())
     }
 
     @Scheduled(fixedRate = 60_000)
@@ -35,7 +36,7 @@ internal class ScheduledMaintenanceTasks
         LOG.info("Triggering availability in infiniteEpisodeStream")
         infiniteEpisodeStream.updateEpisodeStreams(
                 EpisodeStream.DEFAULT_AVAILABILITY_SEC,
-                EpisodeStream.defaultTimeProvider()
+                TimeProvider.getTime()
         )
     }
 

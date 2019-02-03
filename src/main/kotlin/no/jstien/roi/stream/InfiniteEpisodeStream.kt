@@ -1,7 +1,7 @@
 package no.jstien.roi.stream
 
-import no.jstien.roi.episodes.StreamableEpisode
 import no.jstien.roi.episodes.EpisodeSegment
+import no.jstien.roi.episodes.StreamableEpisode
 import no.jstien.roi.episodes.repo.EpisodeRepository
 import no.jstien.roi.event.Event
 import no.jstien.roi.event.EventLog
