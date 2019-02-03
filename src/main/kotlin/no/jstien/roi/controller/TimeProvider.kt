@@ -4,7 +4,7 @@ import no.jstien.roi.event.Event
 import no.jstien.roi.event.EventLog
 
 object TimeProvider {
-    private const val IDLE_THRESHOLD_SEC: Double = 60.0
+    private const val IDLE_THRESHOLD_SEC: Double = 60.0 * 90.0
     private const val NANOS_PER_SEC = 1_000_000_000L
 
     var eventLog: EventLog? = null
@@ -35,7 +35,7 @@ object TimeProvider {
         lastActivity = getClockTime()
 
         if (paused) {
-            eventLog?.addEvent(Event.Type.SERVER_EVENT, "Resuming S3 fetch loop due to inactivity")
+            eventLog?.addEvent(Event.Type.SERVER_EVENT, "Resuming S3 fetch loop")
             paused = false
             timeOffset += (lastActivity - pauseStartTime)
         }
