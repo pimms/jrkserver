@@ -31,7 +31,7 @@ internal class ScheduledMaintenanceTasks
         infiniteEpisodeStream.setStartAvailability(TimeProvider.getTime())
     }
 
-    @Scheduled(fixedRate = 60_000)
+    @Scheduled(fixedRate = 30_000)
     fun triggerAvailabilityUpdate() {
         LOG.info("Triggering availability in infiniteEpisodeStream")
         infiniteEpisodeStream.updateEpisodeStreams(

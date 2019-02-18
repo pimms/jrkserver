@@ -25,7 +25,7 @@ object TimeProvider {
         }
 
         if (paused) {
-            return pauseStartTime
+            return adjustTime(pauseStartTime)
         }
 
         return adjustTime(clockTime)

@@ -1,7 +1,7 @@
 package no.jstien.jrk.episodes.segmentation
 
-import no.jstien.jrk.episodes.StreamableEpisode
 import no.jstien.jrk.episodes.EpisodeSegment
+import no.jstien.jrk.episodes.StreamableEpisode
 import no.jstien.jrk.util.ProcessExecutor
 import no.jstien.jrk.util.ROOT_TEMP_DIRECTORY
 import org.apache.logging.log4j.LogManager
