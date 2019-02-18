@@ -21,20 +21,12 @@ class EpisodeSegment(index: Int, length: Double, filePath: String): AutoCloseabl
     val index = index
     val length = length
     val filePath = filePath
-    private var stream: InputStream? = null
 
     fun getStream(): InputStream {
-        synchronized(this) {
-            if (stream == null) {
-                stream = FileInputStream(filePath)
-            }
-            return stream!!
-        }
+        return FileInputStream(filePath)
     }
 
     override fun close() {
-        stream?.close()
-
         try {
             File(filePath).delete()
         } catch (e: RuntimeException) {

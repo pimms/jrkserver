@@ -76,6 +76,7 @@ class HLSController
         val stream = segment.getStream()
         val array = ByteArray(stream.available())
         stream.read(array)
+        stream.close()
         return ResponseEntity.ok().body(array)
     }
 
