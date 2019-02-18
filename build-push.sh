@@ -9,6 +9,6 @@ eval $(aws ecr get-login | sed 's/-e none //')
 
 mvn clean install || exit 1
 
-docker build -t roi-server . || exit 2
-docker tag roi-server:latest "$ECS_DOCKER_REPO/roi-server:latest" || exit 3
-docker push "$ECS_DOCKER_REPO/roi-server:latest" || exit 4
+docker build -t jrk-server . || exit 2
+docker tag jrk-server:latest "$ECS_DOCKER_REPO/jrk-server:latest" || exit 3
+docker push "$ECS_DOCKER_REPO/jrk-server:latest" || exit 4
