@@ -4,7 +4,7 @@ import no.jstien.jrk.event.Event
 import no.jstien.jrk.event.EventLog
 
 object TimeProvider {
-    private const val IDLE_THRESHOLD_SEC: Double = 120.0
+    private const val IDLE_THRESHOLD_SEC: Double = 5400.0
     private const val NANOS_PER_SEC = 1_000_000_000L
 
     var eventLog: EventLog? = null
