@@ -14,7 +14,10 @@ import javax.servlet.http.HttpServletRequest
 private data class ChannelMeta(
     val playlistURL: String,
     val streamName: String,
-    val streamPictureURL: String
+    val streamPictureURL: String,
+
+    val playlist: String,
+    val streamPicture: String
 )
 
 @RestController
@@ -25,10 +28,13 @@ class ChannelMetaController {
 
     @GetMapping
     fun getChannelMeta(request: HttpServletRequest): ResponseEntity<Any> {
+        val playlist = "live/playlist.m3u8"
+        val streamPicture = "streamPicture"
+
         val rootUrl = request.requestURL.toString()
-        val liveUrl = rootUrl + "live/playlist.m3u8"
-        val pictureUrl = rootUrl + "streamPicture"
-        val channelMeta = ChannelMeta(liveUrl, channelName, pictureUrl)
+        val liveUrl = rootUrl + playlist
+        val pictureUrl = rootUrl + streamPicture
+        val channelMeta = ChannelMeta(liveUrl, channelName, pictureUrl, "/$playlist", "/$streamPicture")
         return ResponseEntity.ok(channelMeta)
     }
 
