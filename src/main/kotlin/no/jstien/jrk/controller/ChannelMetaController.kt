@@ -40,7 +40,7 @@ class ChannelMetaController {
         val pictureUrl = rootUrl + streamPicture
         val nowPlayingURL = rootUrl + nowPlaying
 
-        val channelMeta = ChannelMeta(liveUrl, channelName, pictureUrl, "/$playlist", "/$streamPicture", nowPlaying, nowPlayingURL)
+        val channelMeta = ChannelMeta(liveUrl, channelName, pictureUrl, "/$playlist", "/$streamPicture", "/$nowPlaying", nowPlayingURL)
         return ResponseEntity.ok(channelMeta)
     }
 
