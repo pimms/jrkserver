@@ -12,15 +12,13 @@ import org.springframework.web.bind.annotation.RestController
 import javax.servlet.http.HttpServletRequest
 
 private data class ChannelMeta(
-    val playlistURL: String,
     val streamName: String,
-    val streamPictureURL: String,
 
     val playlist: String,
     val streamPicture: String,
-
     val nowPlaying: String,
-    val nowPlayingURL: String
+    val episodeLog: String,
+    val eventLog: String
 )
 
 @RestController
@@ -34,13 +32,10 @@ class ChannelMetaController {
         val playlist = "live/playlist.m3u8"
         val streamPicture = "streamPicture"
         val nowPlaying = "live/nowPlaying"
+        val episodeLog = "logs/episodes"
+        val eventLog = "logs/events"
 
-        val rootUrl = request.requestURL.toString()
-        val liveUrl = rootUrl + playlist
-        val pictureUrl = rootUrl + streamPicture
-        val nowPlayingURL = rootUrl + nowPlaying
-
-        val channelMeta = ChannelMeta(liveUrl, channelName, pictureUrl, "/$playlist", "/$streamPicture", "/$nowPlaying", nowPlayingURL)
+        val channelMeta = ChannelMeta(channelName, playlist, streamPicture, nowPlaying, episodeLog, eventLog)
         return ResponseEntity.ok(channelMeta)
     }
 
