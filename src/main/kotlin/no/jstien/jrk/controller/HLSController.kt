@@ -31,7 +31,7 @@ class HLSController
                 """
                 #EXTM3U
                 #EXT-X-VERSION:3
-                #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=40000
+                #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=40000,CODECS="mp4a.40.34"
                 chunks.m3u8
                 """.trimIndent()
         return createM3u8Response(body)
