@@ -4,6 +4,7 @@ import no.jstien.jrk.S3FileRepository
 import no.jstien.jrk.live.episodes.EpisodeMetadata
 import no.jstien.jrk.live.episodes.MetadataExtractor
 import org.springframework.format.datetime.DateFormatter
+import java.net.URLEncoder
 import java.util.*
 
 class PodcastRepository(
@@ -35,6 +36,7 @@ class PodcastRepository(
     }
 
     private fun getDownloadUrl(metadata: EpisodeMetadata): String {
-        return "${podcastManifest.rootUrl}/podcast/episode/${metadata.s3Key}"
+        val encodedKey = URLEncoder.encode(metadata.s3Key, "UTF-8")
+        return "${podcastManifest.rootUrl}/podcast/episode/${encodedKey}"
     }
 }

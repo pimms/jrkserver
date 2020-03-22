@@ -25,13 +25,9 @@ class PodcastController(
         return ResponseEntity.ok(rssFeed)
     }
 
-    @GetMapping("/episode/{s3Key}")
-    fun getEpisode(@PathVariable s3Key: String): ResponseEntity<InputStreamResource> {
-        var key = s3Key
-        if (!key.endsWith(".mp3")) {
-            key = "$key.mp3"
-        }
-
+    @GetMapping("/episode/{filename}.{extension}")
+    fun getEpisode(@PathVariable filename: String, @PathVariable extension: String): ResponseEntity<InputStreamResource> {
+        val key = "$filename.$extension"
         val stream = s3FileRepository.openStream(key)
         val streamResource = InputStreamResource(stream)
 
