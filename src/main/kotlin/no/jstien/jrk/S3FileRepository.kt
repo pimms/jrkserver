@@ -1,4 +1,4 @@
-package no.jstien.jrk.live.episodes.repo
+package no.jstien.jrk
 
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.ListObjectsV2Request
@@ -6,6 +6,7 @@ import no.jstien.jrk.util.ROOT_TEMP_DIRECTORY
 import org.apache.logging.log4j.LogManager
 import java.io.File
 import java.io.FileOutputStream
+import java.io.InputStream
 import java.util.*
 
 class S3FileRepository(s3Client: AmazonS3, s3BucketName: String) {
@@ -19,15 +20,9 @@ class S3FileRepository(s3Client: AmazonS3, s3BucketName: String) {
 
     private val fileNames = ArrayList<String>()
 
-
-    fun popRandomS3Key(): String {
-        refreshEpisodesIfEmpty()
-        val index = (0 until fileNames.size).random()
-        val key = fileNames[index]
-        fileNames.removeAt(index)
-        return key
-    }
-
+    /**
+     * Download a file to a temporary location on disk, and returns the path to the file.
+     */
     fun downloadFile(s3Key: String): String {
         try {
             LOGGER.info("Downloading S3-file '$s3Key'")
@@ -54,9 +49,28 @@ class S3FileRepository(s3Client: AmazonS3, s3BucketName: String) {
         }
     }
 
+    fun openStream(s3Key: String): InputStream {
+        try {
+            LOGGER.info("Opening stream to S3-file '$s3Key'")
+            val obj = s3Client.getObject(s3BucketName, s3Key)
+            val inStream = obj.objectContent
+            return inStream
+        } catch (e: Exception) {
+            throw RuntimeException("Failed to open stream to S3-file '$s3Key'", e)
+        }
+    }
+
     fun getAllFileNames(): List<String> {
         refreshEpisodesIfEmpty()
         return fileNames
+    }
+
+    fun popRandomS3Key(): String {
+        refreshEpisodesIfEmpty()
+        val index = (0 until fileNames.size).random()
+        val key = fileNames[index]
+        fileNames.removeAt(index)
+        return key
     }
 
     private fun ClosedRange<Int>.random(): Int {

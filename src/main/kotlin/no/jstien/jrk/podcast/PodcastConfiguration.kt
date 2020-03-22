@@ -1,6 +1,6 @@
 package no.jstien.jrk.podcast
 
-import no.jstien.jrk.live.episodes.repo.S3FileRepository
+import no.jstien.jrk.S3FileRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean

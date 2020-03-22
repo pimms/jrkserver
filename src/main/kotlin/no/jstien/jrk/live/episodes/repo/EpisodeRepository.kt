@@ -1,5 +1,6 @@
 package no.jstien.jrk.live.episodes.repo
 
+import no.jstien.jrk.S3FileRepository
 import no.jstien.jrk.event.Event
 import no.jstien.jrk.event.EventLog
 import no.jstien.jrk.live.episodes.MetadataExtractor

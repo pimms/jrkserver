@@ -1,9 +1,9 @@
 package no.jstien.jrk.live
 
+import no.jstien.jrk.S3FileRepository
 import no.jstien.jrk.event.EventLog
 import no.jstien.jrk.live.episodes.MetadataExtractor
 import no.jstien.jrk.live.episodes.repo.EpisodeRepository
-import no.jstien.jrk.live.episodes.repo.S3FileRepository
 import no.jstien.jrk.live.stream.InfiniteEpisodeStream
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value

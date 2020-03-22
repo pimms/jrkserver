@@ -5,7 +5,6 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import no.jstien.jrk.event.Event
 import no.jstien.jrk.event.EventLog
 import no.jstien.jrk.live.controller.TimeProvider
-import no.jstien.jrk.live.episodes.repo.S3FileRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.*
@@ -22,7 +21,6 @@ import org.springframework.context.annotation.*
 ])
 open class SpringConfig {
     @Value("\${s3.bucketname}") private val s3BucketName: String? = null
-    @Value("\${live.enabled}") private var liveEnabled: Boolean = true
 
     @Bean
     open fun s3Client(): AmazonS3 {

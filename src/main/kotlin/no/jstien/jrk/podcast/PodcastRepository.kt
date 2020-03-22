@@ -1,8 +1,8 @@
 package no.jstien.jrk.podcast
 
+import no.jstien.jrk.S3FileRepository
 import no.jstien.jrk.live.episodes.EpisodeMetadata
 import no.jstien.jrk.live.episodes.MetadataExtractor
-import no.jstien.jrk.live.episodes.repo.S3FileRepository
 import org.springframework.format.datetime.DateFormatter
 import java.util.*
 

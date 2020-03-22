@@ -4,6 +4,7 @@ import io.kotlintest.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import no.jstien.jrk.S3FileRepository
 import no.jstien.jrk.live.episodes.StreamableEpisode
 import no.jstien.jrk.live.episodes.EpisodeSegment
 import no.jstien.jrk.live.episodes.MetadataExtractor
