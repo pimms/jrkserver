@@ -1,21 +1,20 @@
 package no.jstien.jrk.podcast
 
-import no.jstien.jrk.config.PodcastConfig
-import no.jstien.jrk.episodes.EpisodeMetadata
-import no.jstien.jrk.episodes.MetadataExtractor
-import no.jstien.jrk.episodes.repo.S3FileRepository
+import no.jstien.jrk.live.episodes.EpisodeMetadata
+import no.jstien.jrk.live.episodes.MetadataExtractor
+import no.jstien.jrk.live.episodes.repo.S3FileRepository
 import org.springframework.format.datetime.DateFormatter
 import java.util.*
 
 class PodcastRepository(
         private val s3FileRepo: S3FileRepository,
-        private val podcastConfig: PodcastConfig
+        private val podcastManifest: PodcastManifest
 ) {
     private val metadataExtractor: MetadataExtractor = MetadataExtractor(seasonPrefix = null)
     private val pubdateFormatter = DateFormatter("MMM dd, yyyy");
 
     fun getFeed(): PodcastFeed {
-        return PodcastFeed(podcastConfig.title, podcastConfig.description, getItems())
+        return PodcastFeed(podcastManifest.title, podcastManifest.description, getItems())
     }
 
     private fun getItems(): List<PodcastItem> {
@@ -36,6 +35,6 @@ class PodcastRepository(
     }
 
     private fun getDownloadUrl(metadata: EpisodeMetadata): String {
-        return "${podcastConfig.rootUrl}/podcast/episode/${metadata.s3Key}"
+        return "${podcastManifest.rootUrl}/podcast/episode/${metadata.s3Key}"
     }
 }
