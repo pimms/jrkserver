@@ -25,14 +25,19 @@ class PodcastController(
         return ResponseEntity.ok(rssFeed)
     }
 
-    @GetMapping("/episode/{s3Key}", produces = [ MediaType.APPLICATION_OCTET_STREAM_VALUE ])
+    @GetMapping("/episode/{s3Key}")
     fun getEpisode(@PathVariable s3Key: String): ResponseEntity<InputStreamResource> {
-        val stream = s3FileRepository.openStream(s3Key)
+        var key = s3Key
+        if (!key.endsWith(".mp3")) {
+            key = "$key.mp3"
+        }
+
+        val stream = s3FileRepository.openStream(key)
         val streamResource = InputStreamResource(stream)
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_OCTET_STREAM
-        headers.setContentDispositionFormData("attachment", s3Key)
+        headers.setContentDispositionFormData("attachment", key)
 
         return ResponseEntity<InputStreamResource>(streamResource, headers, HttpStatus.OK)
     }
