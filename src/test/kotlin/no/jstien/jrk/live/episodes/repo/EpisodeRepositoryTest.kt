@@ -45,6 +45,6 @@ class EpisodeRepositoryTest {
     @Test
     fun `episode repository enriches episode meta with display name`() {
         val episode = episodeRepository!!.getNextEpisode()
-        episode.displayName shouldBe "Lørdag 31/12"
+        episode.displayName shouldBe "Lørdag 31. desember"
     }
 }

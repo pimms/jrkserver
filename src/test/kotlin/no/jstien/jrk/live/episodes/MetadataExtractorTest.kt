@@ -30,7 +30,7 @@ class MetadataExtractorTest {
     fun `display name is properly parsed`() {
         val extractor = MetadataExtractor("Radioshow")
         val meta = extractor.extractFromS3Key("20160101.mp3")
-        meta.displayName shouldBe "Fredag 1/1"
+        meta.displayName shouldBe "Fredag 1. januar"
     }
 
 }
