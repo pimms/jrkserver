@@ -4,12 +4,12 @@ import io.kotlintest.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
-import no.jstien.jrk.S3FileRepository
-import no.jstien.jrk.live.episodes.StreamableEpisode
+import no.jstien.jrk.event.EventLog
 import no.jstien.jrk.live.episodes.EpisodeSegment
 import no.jstien.jrk.live.episodes.MetadataExtractor
+import no.jstien.jrk.live.episodes.StreamableEpisode
 import no.jstien.jrk.live.episodes.segmentation.FFMPEGSegmenter
-import no.jstien.jrk.event.EventLog
+import no.jstien.jrk.live.stream.StreamFileRepository
 import no.jstien.jrk.util.ROOT_TEMP_DIRECTORY
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test
 private const val S3_KEY = "20161231.mp3"
 
 class EpisodeRepositoryTest {
-    private val fileRepository = mockk<S3FileRepository>()
+    private val fileRepository = mockk<StreamFileRepository>()
     private val eventLog = mockk<EventLog>(relaxed = true)
     private var metadataExtractor = MetadataExtractor(null)
     private var episodeRepository: EpisodeRepository? = null

@@ -65,20 +65,6 @@ class S3FileRepository(s3Client: AmazonS3, s3BucketName: String) {
         return fileNames
     }
 
-    fun popRandomS3Key(): String {
-        refreshEpisodesIfEmpty()
-        val index = (0 until fileNames.size).random()
-        val key = fileNames[index]
-        fileNames.removeAt(index)
-        return key
-    }
-
-    private fun ClosedRange<Int>.random(): Int {
-        val rand = Random()
-        rand.setSeed(System.nanoTime())
-        return rand.nextInt((endInclusive + 1) - start) + start
-    }
-
     private fun refreshEpisodesIfEmpty() {
         if (fileNames.isEmpty())
             refreshEpisodeNames()

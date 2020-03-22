@@ -5,6 +5,7 @@ import no.jstien.jrk.event.EventLog
 import no.jstien.jrk.live.episodes.MetadataExtractor
 import no.jstien.jrk.live.episodes.repo.EpisodeRepository
 import no.jstien.jrk.live.stream.InfiniteEpisodeStream
+import no.jstien.jrk.live.stream.StreamFileRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -20,6 +21,12 @@ import org.springframework.scheduling.annotation.EnableScheduling
 open class LiveConfiguration {
     @Bean
     @Autowired
+    open fun streamFileRepository(s3FileRepository: S3FileRepository): StreamFileRepository {
+        return StreamFileRepository(s3FileRepository)
+    }
+
+    @Bean
+    @Autowired
     open fun metadataExtractor(@Value("\${meta.seasonPrefix}") seasonPrefix: String): MetadataExtractor {
         return MetadataExtractor(seasonPrefix)
     }
@@ -27,9 +34,9 @@ open class LiveConfiguration {
     @Bean
     @Autowired
     open fun episodeRepository(metadataExtractor: MetadataExtractor,
-                               s3FileRepository: S3FileRepository,
+                               streamFileRepository: StreamFileRepository,
                                eventLog: EventLog): EpisodeRepository {
-        return EpisodeRepository(s3FileRepository, metadataExtractor, eventLog)
+        return EpisodeRepository(streamFileRepository, metadataExtractor, eventLog)
     }
 
     @Bean
