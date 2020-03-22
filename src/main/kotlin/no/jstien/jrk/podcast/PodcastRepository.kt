@@ -11,10 +11,10 @@ class PodcastRepository(
         private val podcastManifest: PodcastManifest
 ) {
     private val metadataExtractor: MetadataExtractor = MetadataExtractor(seasonPrefix = null)
-    private val pubdateFormatter = DateFormatter("MMM dd, yyyy");
+    private val pubdateFormatter = DateFormatter("EEE, dd MMM yyyy HH:mm:ss zzz");
 
     fun getFeed(): PodcastFeed {
-        return PodcastFeed(podcastManifest.title, podcastManifest.description, getItems())
+        return PodcastFeed(podcastManifest.title, podcastManifest.description, podcastManifest.imageUrl, getItems())
     }
 
     private fun getItems(): List<PodcastItem> {

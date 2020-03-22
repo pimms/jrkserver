@@ -1,8 +1,8 @@
 package no.jstien.jrk.podcast.controller
 
 import no.jstien.jrk.S3FileRepository
-import no.jstien.jrk.podcast.PodcastFeed
 import no.jstien.jrk.podcast.PodcastRepository
+import no.jstien.jrk.podcast.RssFeed
 import org.springframework.core.io.InputStreamResource
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-
 @RestController
 @RequestMapping("/podcast")
 class PodcastController(
     private val podcastRepository: PodcastRepository,
     private val s3FileRepository: S3FileRepository
 ) {
-    @GetMapping("")
-    fun getPodcastFeed(): ResponseEntity<PodcastFeed> {
-        return ResponseEntity.ok(podcastRepository.getFeed())
+    @GetMapping(produces = [ MediaType.APPLICATION_XML_VALUE ])
+    fun getPodcastFeed(): ResponseEntity<RssFeed> {
+        val rssFeed = RssFeed(podcastRepository.getFeed())
+        return ResponseEntity.ok(rssFeed)
     }
 
     @GetMapping("/episode/{s3Key}", produces = [ MediaType.APPLICATION_OCTET_STREAM_VALUE ])

@@ -1,19 +1,24 @@
 package no.jstien.jrk.podcast
 
-import javax.xml.bind.annotation.XmlAttribute
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
 data class Enclosure(
-    @XmlAttribute
+    @JacksonXmlProperty(isAttribute = true)
     val url: String,
 
-    @XmlAttribute
+    @JacksonXmlProperty(isAttribute = true)
     val type: String = "audio/mpeg"
 )
 
-data class PodcastItem(
+class PodcastItem(
     val title: String,
     val description: String,
     val pubDate: String,
     val enclosure: Enclosure
-)
+) {
+    @JacksonXmlProperty(localName = "itunes:summary")
+    val itunesSummary = description
+
+    val guid = enclosure.url
+}
 

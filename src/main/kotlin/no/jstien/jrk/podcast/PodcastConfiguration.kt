@@ -13,11 +13,12 @@ open class PodcastConfiguration {
     @Value("\${podcast.title}") private val podcastTitle: String? = null
     @Value("\${podcast.description}") private val podcastDesc: String? = null
     @Value("\${podcast.rooturl}") private val podcastRootUrl: String? = null
+    @Value("\${podcast.imageUrl}") private val podcastImageUrl: String? = null
 
     @Bean
     @Autowired
     open fun podcastRepository(s3FileRepository: S3FileRepository): PodcastRepository {
-        val podcastManifest = PodcastManifest(podcastTitle!!, podcastDesc!!, podcastRootUrl!!)
+        val podcastManifest = PodcastManifest(podcastTitle!!, podcastDesc!!, podcastRootUrl!!, podcastImageUrl!!)
         return PodcastRepository(s3FileRepository, podcastManifest)
     }
 }
