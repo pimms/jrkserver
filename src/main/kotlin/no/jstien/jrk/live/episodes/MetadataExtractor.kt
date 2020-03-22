@@ -9,8 +9,9 @@ class MetadataExtractor(private val seasonPrefix: String?) {
         val season = extractSeason(s3Key)
         val date = extractDate(s3Key);
         val displayName = extractDisplayName(date)
+        val description = extractDescription(date)
 
-        return EpisodeMetadata(displayName, date, season, s3Key)
+        return EpisodeMetadata(displayName, description, date, season, s3Key)
     }
 
     private fun extractSeason(s3Key: String): String {
@@ -34,12 +35,19 @@ class MetadataExtractor(private val seasonPrefix: String?) {
     private fun extractDisplayName(date: Date): String {
         // can prolly be simplified by using proper locales
         val weekdays = arrayOf("Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag")
+        val months = arrayOf("januar", "februar", "mars", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember")
 
         // deprecation schmeprecation
         val weekday = weekdays[date.day]
-        val month = date.month + 1
+        val month = months[date.month]
         val day = date.date
+        val year = date.year
 
-        return "$weekday $day/$month"
+        return "$weekday $day. $month"
+    }
+
+    private fun extractDescription(date: Date): String {
+        val displayName = extractDisplayName(date)
+        return "Episoden fra $displayName. Det er alt jeg vet."
     }
 }

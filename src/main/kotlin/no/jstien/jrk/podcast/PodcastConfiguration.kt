@@ -10,9 +10,9 @@ import org.springframework.context.annotation.PropertySource
 @Configuration
 @PropertySource(value= ["classpath:config.properties"])
 open class PodcastConfiguration {
-    @Value("\${podcast.title") private val podcastTitle: String? = null
-    @Value("\${podcast.description") private val podcastDesc: String? = null
-    @Value("\${podcast.rooturl") private val podcastRootUrl: String? = null
+    @Value("\${podcast.title}") private val podcastTitle: String? = null
+    @Value("\${podcast.description}") private val podcastDesc: String? = null
+    @Value("\${podcast.rooturl}") private val podcastRootUrl: String? = null
 
     @Bean
     @Autowired

@@ -27,7 +27,7 @@ class PodcastRepository(
         val s3Keys = s3FileRepo.getAllFileNames()
         return s3Keys
                 .map { metadataExtractor.extractFromS3Key(it) }
-                .map { PodcastItem(it.displayName, "desc pls", getPubdate(it), Enclosure(getDownloadUrl(it))) }
+                .map { PodcastItem(it.displayName, it.description, getPubdate(it), Enclosure(getDownloadUrl(it))) }
     }
 
     private fun getPubdate(metadata: EpisodeMetadata): String {
