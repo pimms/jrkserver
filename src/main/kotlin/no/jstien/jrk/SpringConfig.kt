@@ -19,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 @Configuration
 @PropertySource(value= ["classpath:config.properties"])
 @EnableAutoConfiguration
-@ComponentScan(basePackages = [ "no.jstien.jrk.podcast", "no.jstien.jrk.live" ])
+@ComponentScan(basePackages = [ "no.jstien.jrk.podcast", "no.jstien.jrk.live", "no.jstien.jrk.persistence" ])
 open class SpringConfig {
     @Value("\${s3.bucketname}") private val s3BucketName: String? = null
 
