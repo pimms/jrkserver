@@ -4,9 +4,9 @@ import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader
 import no.jstien.jrk.S3FileRepository
 import org.apache.logging.log4j.LogManager
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.io.File
-import javax.annotation.PostConstruct
 
 @Component
 class MetadataGenerator
@@ -21,8 +21,9 @@ class MetadataGenerator
 
     private var persistentEpisodes: List<PersistentEpisode>? = null
 
-    @PostConstruct
+    @Scheduled(fixedRate = 86400_000)
     fun generateMetadata() {
+        LOGGER.info("Refreshing metadata")
         persistentEpisodeRepository.getAllEpisodes { persistentEpisodes ->
             this.persistentEpisodes = persistentEpisodes
             val s3Keys = s3FileRepository.getAllFileNames()
