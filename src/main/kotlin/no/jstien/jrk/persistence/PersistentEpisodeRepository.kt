@@ -11,14 +11,10 @@ class PersistentEpisodeRepository(
         private val LOGGER = LogManager.getLogger()
     }
 
-    init {
-        getAllEpisodes { episodes ->
-            LOGGER.info("EPISODES?? $episodes")
-        }
-    }
-
     fun saveEpisode(episode: PersistentEpisode) {
-        database.getReference("rr/episodes/${episode.s3Key}")
+        val pathName = episode.s3Key.replace('.', '-')
+
+        database.getReference("rr/episodes/${pathName}")
                 .setValue(episode)
                 .then { episode -> LOGGER.info("Saved episode $episode") }
                 .fail { err -> LOGGER.error("Failed to save episode: $err") }
@@ -30,7 +26,12 @@ class PersistentEpisodeRepository(
                 .orderByKey()
                 .run(Map::class.java)
                 .done(DoneCallback { result ->
-                    val episodes = result.values .map { v ->
+                    if (result == null) {
+                        handler(emptyList())
+                        return@DoneCallback
+                    }
+
+                    val episodes = result.values.map { v ->
                         if (v is Map<*, *>) {
                             var duration: Int?
 

@@ -65,6 +65,11 @@
             <artifactId>google-api-client</artifactId>
             <version>1.30.9</version>
         </dependency>
+        <dependency>
+            <groupId>com.googlecode.soundlibs</groupId>
+            <artifactId>mp3spi</artifactId>
+            <version>1.9.5.4</version>
+        </dependency>
 
         <!-- JACKSON -->
         <dependency>
