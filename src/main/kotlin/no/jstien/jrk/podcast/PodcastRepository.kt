@@ -3,16 +3,21 @@ package no.jstien.jrk.podcast
 import no.jstien.jrk.S3FileRepository
 import no.jstien.jrk.live.episodes.EpisodeMetadata
 import no.jstien.jrk.live.episodes.MetadataExtractor
+import no.jstien.jrk.persistence.PersistentEpisode
+import no.jstien.jrk.persistence.PersistentEpisodeRepository
 import org.springframework.format.datetime.DateFormatter
+import org.springframework.scheduling.annotation.Scheduled
 import java.net.URLEncoder
 import java.util.*
 
 class PodcastRepository(
         private val s3FileRepo: S3FileRepository,
-        private val podcastManifest: PodcastManifest
+        private val podcastManifest: PodcastManifest,
+        private val persistentEpisodeRepository: PersistentEpisodeRepository
 ) {
     private val metadataExtractor: MetadataExtractor = MetadataExtractor(seasonPrefix = null)
     private val pubdateFormatter = DateFormatter("EEE, dd MMM yyyy HH:mm:ss zzz");
+    private var persistentEpisodes: List<PersistentEpisode>? = null
 
     fun getFeed(): PodcastFeed {
         return PodcastFeed(podcastManifest.title, podcastManifest.description, podcastManifest.imageUrl, getItems())
@@ -28,7 +33,14 @@ class PodcastRepository(
         val s3Keys = s3FileRepo.getAllFileNames()
         return s3Keys
                 .map { metadataExtractor.extractFromS3Key(it) }
-                .map { PodcastItem(it.displayName, it.description, getPubdate(it), Enclosure(getDownloadUrl(it))) }
+                .map {
+                    PodcastItem(
+                            it.displayName,
+                            it.description,
+                            getPubdate(it),
+                            Enclosure(getDownloadUrl(it)),
+                            getDuration(it))
+                }
     }
 
     private fun getPubdate(metadata: EpisodeMetadata): String {
@@ -38,5 +50,21 @@ class PodcastRepository(
     private fun getDownloadUrl(metadata: EpisodeMetadata): String {
         val encodedKey = URLEncoder.encode(metadata.s3Key, "UTF-8")
         return "${podcastManifest.rootUrl}/podcast/episode/${encodedKey}"
+    }
+
+    private fun getDuration(metadata: EpisodeMetadata): Int? {
+        val episode = getPersistentEpisodeForS3Key(metadata.s3Key)
+        return episode?.duration
+    }
+
+    private fun getPersistentEpisodeForS3Key(s3Key: String): PersistentEpisode? {
+        return persistentEpisodes?.find { e -> e.s3Key == s3Key }
+    }
+
+    @Scheduled(fixedRate = 3600_000)
+    private fun refreshMetadata() {
+        persistentEpisodeRepository.getAllEpisodes { episodes ->
+            persistentEpisodes = episodes
+        }
     }
 }
