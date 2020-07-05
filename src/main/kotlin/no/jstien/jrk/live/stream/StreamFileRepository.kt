@@ -6,7 +6,7 @@ class StreamFileRepository(private val s3FileRepository: S3FileRepository) {
     private val s3Keys = ArrayList<String>()
 
     fun downloadFile(s3Key: String): String {
-        return s3FileRepository.downloadFile(s3Key)
+        return s3FileRepository.downloadFile(s3Key, "live")
     }
 
     fun popRandomS3Key(): String {

@@ -35,20 +35,18 @@ class MetadataGenerator
     }
 
     private fun generateMetadataForEpisode(s3Key: String) {
-        LOGGER.info("$s3Key...")
-
         var episode = persistentEpisodes?.filter { e -> e.s3Key == s3Key }?.firstOrNull()
 
         if (episode == null) {
             episode = PersistentEpisode(s3Key, null)
-            LOGGER.info("  Creating entry")
             persistentEpisodeRepository.saveEpisode(episode)
         }
 
         if (episode.duration == null) {
-            val filePath = s3FileRepository.downloadFile(s3Key)
+            val filePath = s3FileRepository.downloadFile(s3Key, "md-gen")
 
             try {
+                LOGGER.info("Extracting duration of $s3Key")
                 val file = File(filePath)
                 val fileFormat = MpegAudioFileReader().getAudioFileFormat(file)
                 val properties = fileFormat.properties()

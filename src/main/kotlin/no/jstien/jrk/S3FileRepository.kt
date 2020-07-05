@@ -9,26 +9,29 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.util.*
 
-class S3FileRepository(s3Client: AmazonS3, s3BucketName: String) {
+class S3FileRepository(private val s3Client: AmazonS3, private val s3BucketName: String) {
     companion object {
         private val LOGGER = LogManager.getLogger()
-        private val TEMP_PATH = ROOT_TEMP_DIRECTORY + "/downloadedFromS3.mp3"
     }
-
-    private val s3Client = s3Client
-    private val s3BucketName = s3BucketName
 
     private val fileNames = ArrayList<String>()
 
     /**
      * Download a file to a temporary location on disk, and returns the path to the file.
+     *
+     * The tag parameter should be used to identify the context, as each tag/context will
+     * use the same file path. This allows multiple contexts to work with downloaded files
+     * simultaneously.
      */
-    fun downloadFile(s3Key: String): String {
+    fun downloadFile(s3Key: String, tag: String = ""): String {
         try {
             LOGGER.info("Downloading S3-file '$s3Key'")
+
+            val tempPath = "$ROOT_TEMP_DIRECTORY/downloaded$tag.mp3"
+
             val obj = s3Client.getObject(s3BucketName, s3Key)
             val inStream = obj.objectContent
-            val outStream = FileOutputStream(File(TEMP_PATH))
+            val outStream = FileOutputStream(File(tempPath))
 
             val buffer = ByteArray(1024)
             var readLen = 0
@@ -43,7 +46,7 @@ class S3FileRepository(s3Client: AmazonS3, s3BucketName: String) {
             outStream.close()
 
             LOGGER.info("Downloaded S3-file '$s3Key'")
-            return TEMP_PATH
+            return tempPath
         } catch (e: Exception) {
             throw RuntimeException("Failed to download S3-file '$s3Key'", e)
         }
