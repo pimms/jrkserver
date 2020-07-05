@@ -27,10 +27,11 @@ class S3FileRepository(private val s3Client: AmazonS3, private val s3BucketName:
         try {
             LOGGER.info("Downloading S3-file '$s3Key'")
 
-            val tempPath = "$ROOT_TEMP_DIRECTORY/downloaded$tag.mp3"
-
             val obj = s3Client.getObject(s3BucketName, s3Key)
             val inStream = obj.objectContent
+
+            val tempPath = "$ROOT_TEMP_DIRECTORY/downloaded$tag.mp3"
+            File(ROOT_TEMP_DIRECTORY).mkdirs()
             val outStream = FileOutputStream(File(tempPath))
 
             val buffer = ByteArray(1024)
