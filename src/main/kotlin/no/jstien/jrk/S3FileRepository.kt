@@ -14,7 +14,7 @@ class S3FileRepository(private val s3Client: AmazonS3, private val s3BucketName:
         private val LOGGER = LogManager.getLogger()
     }
 
-    private val fileNames = ArrayList<String>()
+    private val fileReferences = ArrayList<S3FileReference>()
 
     /**
      * Download a file to a temporary location on disk, and returns the path to the file.
@@ -64,13 +64,13 @@ class S3FileRepository(private val s3Client: AmazonS3, private val s3BucketName:
         }
     }
 
-    fun getAllFileNames(): List<String> {
+    fun getAllReferences(): List<S3FileReference> {
         refreshEpisodesIfEmpty()
-        return fileNames
+        return fileReferences
     }
 
     private fun refreshEpisodesIfEmpty() {
-        if (fileNames.isEmpty())
+        if (fileReferences.isEmpty())
             refreshEpisodeNames()
     }
 
@@ -78,13 +78,15 @@ class S3FileRepository(private val s3Client: AmazonS3, private val s3BucketName:
         val req = ListObjectsV2Request()
         req.bucketName = s3BucketName
         req.maxKeys = 10000
-        fileNames.clear()
+        fileReferences.clear()
 
         var result = s3Client.listObjectsV2(req);
         while (result.objectSummaries.size > 0) {
-            result.objectSummaries.forEach { s -> fileNames.add(s.key) }
+            result.objectSummaries.forEach { summary ->
+                fileReferences.add(S3FileReference(summary.key, summary.size))
+            }
 
-            req.startAfter = fileNames.last()
+            req.startAfter = fileReferences.last().key
             result = s3Client.listObjectsV2(req)
         }
     }

@@ -12,7 +12,7 @@ class PersistentEpisodeRepository(
     }
 
     fun saveEpisode(episode: PersistentEpisode) {
-        val pathName = episode.s3Key.replace('.', '-')
+        val pathName = episode.s3Key.replace('.', '-').replace('Ø', 'O')
 
         database.getReference("rr/episodes/${pathName}")
                 .setValue(episode)
@@ -38,12 +38,17 @@ class PersistentEpisodeRepository(
                             if (v.contains("s3Key") && v["s3Key"] is String) {
                                 val s3Key = v["s3Key"] as String
                                 var duration: Int? = null
+                                var desc: String? = null
 
                                 if (v.containsKey("duration") && v["duration"] is Double) {
                                     duration = (v["duration"] as Double).toInt()
                                 }
 
-                                return@map PersistentEpisode(s3Key, duration)
+                                if (v.containsKey("desc") && v["desc"] is String) {
+                                    desc = v["desc"] as String
+                                }
+
+                                return@map PersistentEpisode(s3Key, duration, desc)
                             }
 
                             return@map null

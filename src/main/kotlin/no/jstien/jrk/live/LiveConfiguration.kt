@@ -2,7 +2,7 @@ package no.jstien.jrk.live
 
 import no.jstien.jrk.S3FileRepository
 import no.jstien.jrk.event.EventLog
-import no.jstien.jrk.live.episodes.MetadataExtractor
+import no.jstien.jrk.persistence.MetadataExtractor
 import no.jstien.jrk.live.episodes.repo.EpisodeRepository
 import no.jstien.jrk.live.stream.InfiniteEpisodeStream
 import no.jstien.jrk.live.stream.StreamFileRepository

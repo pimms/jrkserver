@@ -1,17 +1,19 @@
-package no.jstien.jrk.live.episodes
+package no.jstien.jrk.persistence
 
+import no.jstien.jrk.S3FileReference
+import no.jstien.jrk.live.episodes.EpisodeMetadata
 import java.text.SimpleDateFormat
 import java.util.*
 
 class MetadataExtractor(private val seasonPrefix: String?) {
 
-    fun extractFromS3Key(s3Key: String): EpisodeMetadata {
+    fun extractFromS3Reference(reference: S3FileReference): EpisodeMetadata {
+        val s3Key = reference.key
         val season = extractSeason(s3Key)
         val date = extractDate(s3Key);
         val displayName = extractDisplayName(date)
-        val description = extractDescription(date)
 
-        return EpisodeMetadata(displayName, description, date, season, s3Key)
+        return EpisodeMetadata(displayName, date, season, s3Key, reference.size)
     }
 
     private fun extractSeason(s3Key: String): String {
@@ -44,10 +46,5 @@ class MetadataExtractor(private val seasonPrefix: String?) {
         val year = date.year
 
         return "$weekday $day. $month"
-    }
-
-    private fun extractDescription(date: Date): String {
-        val displayName = extractDisplayName(date)
-        return "Episoden fra $displayName. Det er alt jeg vet."
     }
 }

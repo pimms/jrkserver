@@ -9,6 +9,9 @@ data class Enclosure(
     val url: String,
 
     @JacksonXmlProperty(isAttribute = true)
+    val length: Long,
+
+    @JacksonXmlProperty(isAttribute = true)
     val type: String = "audio/mpeg"
 )
 

@@ -5,4 +5,6 @@ data class PodcastManifest(
     val description: String,
     val rootUrl: String,
     val imageUrl: String
-)
+) {
+    val link = "$rootUrl/podcast"
+}

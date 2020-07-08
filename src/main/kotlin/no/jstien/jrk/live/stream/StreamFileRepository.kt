@@ -1,26 +1,27 @@
 package no.jstien.jrk.live.stream
 
+import no.jstien.jrk.S3FileReference
 import no.jstien.jrk.S3FileRepository
 
 class StreamFileRepository(private val s3FileRepository: S3FileRepository) {
-    private val s3Keys = ArrayList<String>()
+    private val references = ArrayList<S3FileReference>()
 
-    fun downloadFile(s3Key: String): String {
-        return s3FileRepository.downloadFile(s3Key, "live")
+    fun downloadFile(s3Ref: S3FileReference): String {
+        return s3FileRepository.downloadFile(s3Ref.key, "live")
     }
 
-    fun popRandomS3Key(): String {
+    fun popRandom(): S3FileReference {
         refreshEpisodesIfEmpty()
-        val index = (0 until s3Keys.size).random()
-        val key = s3Keys[index]
-        s3Keys.removeAt(index)
-        return key
+        val index = (0 until references.size).random()
+        val ref = references[index]
+        references.removeAt(index)
+        return ref
     }
 
     private fun refreshEpisodesIfEmpty() {
-        if (s3Keys.isEmpty()) {
-            s3Keys.clear()
-            s3Keys.addAll(s3FileRepository.getAllFileNames())
+        if (references.isEmpty()) {
+            references.clear()
+            references.addAll(s3FileRepository.getAllReferences())
         }
     }
 }

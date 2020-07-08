@@ -4,12 +4,13 @@ import io.kotlintest.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import no.jstien.jrk.S3FileReference
 import no.jstien.jrk.event.EventLog
 import no.jstien.jrk.live.episodes.EpisodeSegment
-import no.jstien.jrk.live.episodes.MetadataExtractor
 import no.jstien.jrk.live.episodes.StreamableEpisode
 import no.jstien.jrk.live.episodes.segmentation.FFMPEGSegmenter
 import no.jstien.jrk.live.stream.StreamFileRepository
+import no.jstien.jrk.persistence.MetadataExtractor
 import no.jstien.jrk.util.ROOT_TEMP_DIRECTORY
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -26,7 +27,7 @@ class EpisodeRepositoryTest {
     fun setup() {
         mockkConstructor(FFMPEGSegmenter::class)
 
-        every { fileRepository.popRandomS3Key() } returns S3_KEY
+        every { fileRepository.popRandom() } returns S3FileReference(S3_KEY, 0)
         every { fileRepository.downloadFile(any()) } returns "$ROOT_TEMP_DIRECTORY/downloaded.mp3"
 
         val segs = List(10) { n -> EpisodeSegment(n, 10.0, "/tmp/lol$n.mp3") }

@@ -2,7 +2,7 @@ package no.jstien.jrk.podcast
 
 import no.jstien.jrk.S3FileRepository
 import no.jstien.jrk.live.episodes.EpisodeMetadata
-import no.jstien.jrk.live.episodes.MetadataExtractor
+import no.jstien.jrk.persistence.MetadataExtractor
 import no.jstien.jrk.persistence.PersistentEpisode
 import no.jstien.jrk.persistence.PersistentEpisodeRepository
 import org.springframework.format.datetime.DateFormatter
@@ -20,7 +20,12 @@ class PodcastRepository(
     private var persistentEpisodes: List<PersistentEpisode>? = null
 
     fun getFeed(): PodcastFeed {
-        return PodcastFeed(podcastManifest.title, podcastManifest.description, podcastManifest.imageUrl, getItems())
+        return PodcastFeed(
+                podcastManifest.title,
+                podcastManifest.description,
+                podcastManifest.link,
+                podcastManifest.imageUrl,
+                getItems())
     }
 
     private fun getItems(): List<PodcastItem> {
@@ -28,17 +33,16 @@ class PodcastRepository(
         return getS3Episodes()
     }
 
-
     private fun getS3Episodes(): List<PodcastItem> {
-        val s3Keys = s3FileRepo.getAllFileNames()
-        return s3Keys
-                .map { metadataExtractor.extractFromS3Key(it) }
+        val references = s3FileRepo.getAllReferences()
+        return references
+                .map { metadataExtractor.extractFromS3Reference(it) }
                 .map {
                     PodcastItem(
                             it.displayName,
-                            it.description,
+                            getPersistentEpisodeForS3Key(it.s3Key)?.desc ?: "",
                             getPubdate(it),
-                            Enclosure(getDownloadUrl(it)),
+                            Enclosure(getDownloadUrl(it), it.size),
                             getDuration(it))
                 }
     }

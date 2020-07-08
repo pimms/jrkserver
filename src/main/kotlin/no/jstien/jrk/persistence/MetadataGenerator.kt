@@ -26,10 +26,10 @@ class MetadataGenerator
         LOGGER.info("Refreshing metadata")
         persistentEpisodeRepository.getAllEpisodes { persistentEpisodes ->
             this.persistentEpisodes = persistentEpisodes
-            val s3Keys = s3FileRepository.getAllFileNames()
+            val references = s3FileRepository.getAllReferences()
 
-            s3Keys.forEach { s3Key ->
-                generateMetadataForEpisode(s3Key)
+            references.forEach { ref ->
+                generateMetadataForEpisode(ref.key)
             }
         }
     }
@@ -38,7 +38,7 @@ class MetadataGenerator
         var episode = persistentEpisodes?.filter { e -> e.s3Key == s3Key }?.firstOrNull()
 
         if (episode == null) {
-            episode = PersistentEpisode(s3Key, null)
+            episode = PersistentEpisode(s3Key, null, null)
             persistentEpisodeRepository.saveEpisode(episode)
         }
 
@@ -52,7 +52,7 @@ class MetadataGenerator
                 val properties = fileFormat.properties()
                 val duration = (properties["duration"] as Long / 1_000_000).toInt()
 
-                episode = PersistentEpisode(s3Key, duration)
+                episode = PersistentEpisode(s3Key, duration, episode.desc)
                 persistentEpisodeRepository.saveEpisode(episode)
             } catch (e: Exception) {
                 LOGGER.error("Failed to extract duration", e)
