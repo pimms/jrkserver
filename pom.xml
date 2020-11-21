@@ -28,8 +28,8 @@
         <log4j.version>1.2.17</log4j.version>
         <gson.version>2.8.6</gson.version>
 
-        <kotlinTest.version>3.1.7</kotlinTest.version>
-        <mockk.version>1.8.5</mockk.version>
+        <kotlinTest.version>3.4.2</kotlinTest.version>
+        <mockk.version>1.10.2</mockk.version>
     </properties>
 
     <dependencies>
