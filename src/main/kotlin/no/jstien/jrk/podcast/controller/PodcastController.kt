@@ -28,13 +28,10 @@ class PodcastController(
     @GetMapping("/episode/{filename}.{extension}")
     fun getEpisode(@PathVariable filename: String, @PathVariable extension: String): ResponseEntity<InputStreamResource> {
         val key = "$filename.$extension"
-        val stream = s3FileRepository.openStream(key)
-        val streamResource = InputStreamResource(stream)
+        val s3Url = s3FileRepository.createPresignedUrl(key)
 
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.APPLICATION_OCTET_STREAM
-        headers.setContentDispositionFormData("attachment", key)
-
-        return ResponseEntity<InputStreamResource>(streamResource, headers, HttpStatus.OK)
+        val redirHeaders = HttpHeaders()
+        redirHeaders.add("Location", s3Url.toString())
+        return ResponseEntity<InputStreamResource>(null, redirHeaders, HttpStatus.FOUND)
     }
 }
